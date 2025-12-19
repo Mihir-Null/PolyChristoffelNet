@@ -1,0 +1,15 @@
+# requirements.txt
+# Core
+torch>=2.2
+numpy>=1.24
+
+# Data loading / utilities
+tqdm>=4.66
+
+# Plotting (inspect.py / inspect_metric.py)
+matplotlib>=3.7
+
+# Optional: speed / mixed precision quality-of-life (usually bundled with torch CUDA wheels)
+nvidia-cudnn-cu12
+nvidia-cublas-cu12
+nvidia-cuda-runtime-cu12
