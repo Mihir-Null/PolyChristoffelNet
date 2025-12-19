@@ -1,4 +1,4 @@
-\documentclass[aspectratio=169]{beamer}
+\documentclass[aspectratio=169,9pt]{beamer}
 
 % -------------------------
 % Theme / packages
@@ -264,7 +264,7 @@ Given reconstructed $g(x)$:
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Training: backprop through geodesic rollout (computational graph)}
+\begin{frame}{Training: Backprop + Computational Graph + Pytorch}
 \textbf{Forward pass (one minibatch)}
 \begin{itemize}
   \item Initialize from data (or latent): $(x_0, v_0)$.
@@ -292,7 +292,7 @@ Given reconstructed $g(x)$:
 \]
 \end{frame}
 
-\begin{frame}{Gradient signal on Christoffel coefficients (why it is interpretable)}
+\begin{frame}{Gradient signal on Christoffel coefficients}
 Because $\Gamma$ is \textbf{linear} in the coefficients $C^i_{\;jk,m}$, the gradient has a clean form.
 
 \vspace{0.25em}

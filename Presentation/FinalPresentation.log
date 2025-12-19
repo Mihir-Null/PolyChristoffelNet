@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2025.12.15)  19 DEC 2025 14:59
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2025.12.15)  19 DEC 2025 15:05
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -127,8 +127,8 @@ Package: pgfrcs 2023-01-15 v3.1.10 (3.1.10)
 \pgfmath@stack@operation=\toks25
 ) (C:\Users\walnu\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunctions.code.tex) (C:\Users\walnu\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunctions.basic.code.tex) (C:\Users\walnu\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunctions.trigonometric.code.tex) (C:\Users\walnu\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunctions.random.code.tex) (C:\Users\walnu\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunctions.comparison.code.tex) (C:\Users\walnu\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunctions.base.code.tex) (C:\Users\walnu\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunctions.round.code.tex) (C:\Users\walnu\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunctions.misc.code.tex) (C:\Users\walnu\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunctions.integerarithmetics.code.tex) (C:\Users\walnu\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathcalc.code.tex) (C:\Users\walnu\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfloat.code.tex
 \c@pgfmathroundto@lastzeros=\count296
-))) (C:\Users\walnu\AppData\Local\Programs\MiKTeX\tex/latex/base\size11.clo
-File: size11.clo 2024/06/29 v1.4n Standard LaTeX file (size option)
+))) (C:\Users\walnu\AppData\Local\Programs\MiKTeX\tex/latex/extsizes\size9.clo
+File: size9.clo 1999/11/11 v1.4a NON-Standard LaTeX file (size option)
 ) (C:\Users\walnu\AppData\Local\Programs\MiKTeX\tex/latex/pgf/basiclayer\pgfcore.sty (C:\Users\walnu\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphicx.sty
 Package: graphicx 2021/09/16 v1.2d Enhanced LaTeX Graphics (DPC,SPQR)
  (C:\Users\walnu\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphics.sty
@@ -724,12 +724,12 @@ LaTeX Font Info:    ... okay on input line 26.
 * \topmargin=-72.26999pt
 * \headheight=14.22636pt
 * \headsep=0.0pt
-* \topskip=11.0pt
+* \topskip=9.0pt
 * \footskip=14.22636pt
 * \marginparwidth=4.0pt
 * \marginparsep=10.0pt
 * \columnsep=10.0pt
-* \skip\footins=10.0pt plus 4.0pt minus 2.0pt
+* \skip\footins=8.0pt plus 4.0pt minus 2.0pt
 * \hoffset=0.0pt
 * \voffset=0.0pt
 * \mag=1000
@@ -825,7 +825,7 @@ Dictionary: translator-numbers-dictionary, Language: English
 ) (C:\Users\walnu\AppData\Local\Programs\MiKTeX\tex/latex/translator\translator-theorem-dictionary-English.dict
 Dictionary: translator-theorem-dictionary, Language: English 
 ) (FinalPresentation.nav)
-Overfull \vbox (15.63992pt too high) detected at line 28
+Overfull \vbox (12.59242pt too high) detected at line 28
  []
 
 
@@ -905,15 +905,11 @@ File: ot1mathkerncmss.fd 2020/01/31 Fontinst v1.933 font definitions for OT1/mat
 [16
 
 ]
-Overfull \vbox (37.46843pt too high) detected at line 293
- []
-
-
 
 [17
 
 ]
-Overfull \vbox (63.0887pt too high) detected at line 332
+Overfull \vbox (4.08693pt too high) detected at line 332
  []
 
 
@@ -940,7 +936,7 @@ File: figs/AE1PolarChrist.png Graphic file (type png)
 Package pdftex.def Info: figs/AE1PolarChrist.png  used on input line 376.
 (pdftex.def)             Requested size: 278.83578pt x 179.2509pt.
 
-Overfull \vbox (241.58257pt too high) detected at line 376
+Overfull \vbox (220.80894pt too high) detected at line 376
  []
 
 
@@ -948,7 +944,7 @@ Overfull \vbox (241.58257pt too high) detected at line 376
 [21
 
  <./figs/AE0PolarFig1.png> <./figs/AE1PolarChrist.png>]
-Overfull \vbox (68.0147pt too high) detected at line 406
+Overfull \vbox (3.46828pt too high) detected at line 406
  []
 
 
@@ -962,7 +958,7 @@ File: figs/metric.png Graphic file (type png)
 Package pdftex.def Info: figs/metric.png  used on input line 415.
 (pdftex.def)             Requested size: 278.83578pt x 159.33414pt.
 
-Overfull \vbox (27.48851pt too high) detected at line 415
+Overfull \vbox (6.83572pt too high) detected at line 415
  []
 
 
@@ -976,10 +972,6 @@ File: figs/truemetric.png Graphic file (type png)
 Package pdftex.def Info: figs/truemetric.png  used on input line 423.
 (pdftex.def)             Requested size: 278.83578pt x 159.33414pt.
 
-Overfull \vbox (4.24442pt too high) detected at line 423
- []
-
-
 
 [24
 
@@ -990,7 +982,7 @@ File: figs/ae_metric.png Graphic file (type png)
 Package pdftex.def Info: figs/ae_metric.png  used on input line 432.
 (pdftex.def)             Requested size: 278.83578pt x 159.33414pt.
 
-Overfull \vbox (40.99927pt too high) detected at line 432
+Overfull \vbox (6.83572pt too high) detected at line 432
  []
 
 
@@ -1004,7 +996,7 @@ File: figs/kindatrue_ae_metric.png Graphic file (type png)
 Package pdftex.def Info: figs/kindatrue_ae_metric.png  used on input line 441.
 (pdftex.def)             Requested size: 278.83578pt x 159.33414pt.
 
-Overfull \vbox (43.12843pt too high) detected at line 441
+Overfull \vbox (17.67815pt too high) detected at line 441
  []
 
 
@@ -1050,15 +1042,15 @@ Package rerunfilecheck Info: File `FinalPresentation.out' has not changed.
 (rerunfilecheck)             Checksum: AC7E458860F154C7EB1565AEC823A2F7;361.
  ) 
 Here is how much of TeX's memory you used:
- 26104 strings out of 473530
- 528956 string characters out of 5714793
- 880546 words of memory out of 5000000
- 48720 multiletter control sequences out of 15000+600000
- 577226 words of font info for 93 fonts, out of 8000000 for 9000
+ 26080 strings out of 473530
+ 528682 string characters out of 5714793
+ 880584 words of memory out of 5000000
+ 48698 multiletter control sequences out of 15000+600000
+ 573345 words of font info for 81 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  128i,13n,123p,1933b,756s stack positions out of 10000i,1000n,20000p,200000b,200000s
- <C:\Users\walnu\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcss1000.pk> <C:\Users\walnu\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcss1095.pk><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmss10.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmss12.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmss8.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmssbx10.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmssi10.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmssi8.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on FinalPresentation.pdf (31 pages, 1358893 bytes).
+ <C:\Users\walnu\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcss0800.pk> <C:\Users\walnu\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcss0900.pk><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cmextra/cmex9.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi9.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr9.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmss10.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmss8.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmss9.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmssbx10.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmssi8.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmssi9.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy6.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy9.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on FinalPresentation.pdf (31 pages, 1359451 bytes).
 PDF statistics:
  310 PDF objects out of 1000 (max. 8388607)
  71 named destinations out of 1000 (max. 500000)
