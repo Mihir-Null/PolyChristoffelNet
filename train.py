@@ -99,7 +99,7 @@ def main():
                 loss = loss_main
 
                 # 5) Metric reconstruction + consistency losses
-                if cfg.use_metric_losses:
+                if (cfg.use_metric_losses and (ep > round(cfg.metric_warmup_epochs * cfg.epochs))):
                     # Choose a basepoint in latent (batch mean)
                     z_base = z0.mean(dim=0, keepdim=True)  # (1,d)
 
@@ -136,7 +136,7 @@ def main():
             total += float(loss.item())
 
         print(f"Epoch {ep:03d} | loss {total / len(dl):.6f}")
-        
+
         # save new checkpoints
         os.makedirs("checkpoints", exist_ok=True)
         to_save = model.module.state_dict() if isinstance(model, nn.DataParallel) else model.state_dict()

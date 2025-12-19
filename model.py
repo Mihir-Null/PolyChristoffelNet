@@ -20,7 +20,8 @@ class BaseMetric(nn.Module):
         assert sig.p + sig.q == d
         self.d = d
         self.sig = sig
-        self.L = nn.Parameter(torch.randn(d, d) * 0.01)
+        # self.L = nn.Parameter(torch.randn(d, d) * 0.01) # ofc random metric is not trainable dumbass
+        self.L = nn.Parameter(torch.eye(d) + 0.01 * torch.randn(d, d))
         self.log_scales = nn.Parameter(torch.zeros(d))
         signs = torch.tensor([-1.0] * sig.q + [1.0] * sig.p)
         self.register_buffer("signs", signs)

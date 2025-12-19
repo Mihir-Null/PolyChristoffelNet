@@ -37,6 +37,7 @@ class TrainConfig:
     epochs: int = 30
     lr: float = 2e-3
     amp: bool = True
+    metric_warmup_epochs = 0.5 # as a percentage of total
 
     # Loss weights
     lam_loop: float = 0.1
