@@ -264,6 +264,73 @@ Given reconstructed $g(x)$:
 \end{itemize}
 \end{frame}
 
+\begin{frame}{Training: backprop through geodesic rollout (computational graph)}
+\textbf{Forward pass (one minibatch)}
+\begin{itemize}
+  \item Initialize from data (or latent): $(x_0, v_0)$.
+  \item Rollout dynamics for $t=0,\dots,T-1$ with step $\Delta t$:
+  \[
+  v_{t+1}=v_t + \Delta t\,a(x_t,v_t),\qquad
+  x_{t+1}=x_t + \Delta t\,v_{t+1},
+  \]
+  where
+  \[
+  a^i(x_t,v_t) = -\Gamma^i_{\;jk}(x_t)\,v_t^j v_t^k,
+  \qquad
+  \Gamma^i_{\;jk}(x)=\sum_{m=1}^P C^i_{\;jk,m}\,\phi_m(x).
+  \]
+  \item Compute loss on the trajectory (and optional geometry regularizers):
+  \[
+  \mathcal{L}=\sum_{t=1}^T \|x_t - x_t^{\text{true}}\|^2 + \lambda\,\mathcal{L}_{\text{geom}}.
+  \]
+\end{itemize}
+
+\vspace{0.5em}
+\textbf{Autodiff view:} the rollout is a differentiable computation graph. Gradients flow
+\[
+\mathcal{L}\ \to\ (x_{1:T},v_{1:T})\ \to\ a(\cdot)\ \to\ \Gamma(x_t)\ \to\ C.
+\]
+\end{frame}
+
+\begin{frame}{Gradient signal on Christoffel coefficients (why it is interpretable)}
+Because $\Gamma$ is \textbf{linear} in the coefficients $C^i_{\;jk,m}$, the gradient has a clean form.
+
+\vspace{0.25em}
+\textbf{At a single step $t$:}
+\[
+\Gamma^i_{\;jk}(x_t)=\sum_{m=1}^P C^i_{\;jk,m}\,\phi_m(x_t)
+\quad\Longrightarrow\quad
+\frac{\partial \Gamma^i_{\;jk}(x_t)}{\partial C^p_{\;qr,m}}
+=
+\delta^i_p\,\delta^q_j\,\delta^r_k\;\phi_m(x_t).
+\]
+
+\textbf{Acceleration coupling:}
+\[
+a^i_t = -\Gamma^i_{\;jk}(x_t)\,v_t^j v_t^k
+\quad\Longrightarrow\quad
+\frac{\partial a^i_t}{\partial C^i_{\;jk,m}}
+=
+-\phi_m(x_t)\,v_t^j v_t^k.
+\]
+
+\textbf{Chain rule through time (BPTT):}
+\[
+\frac{\partial \mathcal{L}}{\partial C^i_{\;jk,m}}
+=
+\sum_{t=0}^{T-1}
+\left\langle
+\frac{\partial \mathcal{L}}{\partial a^i_t},
+-\phi_m(x_t)\,v_t^j v_t^k
+\right\rangle
+\;+\;\frac{\partial \mathcal{L}_{\text{geom}}}{\partial C^i_{\;jk,m}}.
+\]
+
+\vspace{0.25em}
+\textbf{Interpretation:} each coefficient update is a weighted sum of \emph{state features} $\phi_m(x_t)$ times \emph{velocity interactions} $v_t^j v_t^k$,
+so learned geometry can be inspected term-by-term (e.g., which monomials drive which couplings).
+\end{frame}
+
 \begin{frame}{Proof of Concept experiment: polar inertial motion}
 Use a synthetic benchmark with known Christoffels:
 \[
