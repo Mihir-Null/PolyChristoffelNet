@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2025.12.15)  19 DEC 2025 13:42
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2025.12.15)  19 DEC 2025 14:58
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -909,82 +909,113 @@ File: ot1mathkerncmss.fd 2020/01/31 Fontinst v1.933 font definitions for OT1/mat
 [17
 
 ]
-<figs/AE0PolarFig1.png, id=129, 1011.78pt x 650.43pt>
-File: figs/AE0PolarFig1.png Graphic file (type png)
-<use figs/AE0PolarFig1.png>
-Package pdftex.def Info: figs/AE0PolarFig1.png  used on input line 308.
-(pdftex.def)             Requested size: 203.15048pt x 130.58984pt.
-<figs/AE1PolarChrist.png, id=131, 1011.78pt x 650.43pt>
-File: figs/AE1PolarChrist.png Graphic file (type png)
-<use figs/AE1PolarChrist.png>
-Package pdftex.def Info: figs/AE1PolarChrist.png  used on input line 308.
-(pdftex.def)             Requested size: 203.15048pt x 130.58984pt.
-
-Overfull \vbox (156.50363pt too high) detected at line 308
- []
-
-
 
 [18
 
- <./figs/AE0PolarFig1.png> <./figs/AE1PolarChrist.png>]
-<figs/metric.png, id=140, 1011.78pt x 578.16pt>
-File: figs/metric.png Graphic file (type png)
-<use figs/metric.png>
-Package pdftex.def Info: figs/metric.png  used on input line 348.
-(pdftex.def)             Requested size: 203.15048pt x 116.07986pt.
-<figs/truemetric.png, id=141, 1011.78pt x 578.16pt>
-File: figs/truemetric.png Graphic file (type png)
-<use figs/truemetric.png>
-Package pdftex.def Info: figs/truemetric.png  used on input line 348.
-(pdftex.def)             Requested size: 203.15048pt x 116.07986pt.
+]
+<figs/AE0PolarFig1.png, id=125, 1011.78pt x 650.43pt>
+File: figs/AE0PolarFig1.png Graphic file (type png)
+<use figs/AE0PolarFig1.png>
+Package pdftex.def Info: figs/AE0PolarFig1.png  used on input line 309.
+(pdftex.def)             Requested size: 278.83578pt x 179.2509pt.
+<figs/AE1PolarChrist.png, id=127, 1011.78pt x 650.43pt>
+File: figs/AE1PolarChrist.png Graphic file (type png)
+<use figs/AE1PolarChrist.png>
+Package pdftex.def Info: figs/AE1PolarChrist.png  used on input line 309.
+(pdftex.def)             Requested size: 278.83578pt x 179.2509pt.
 
-Overfull \vbox (150.41364pt too high) detected at line 348
+Overfull \vbox (241.58257pt too high) detected at line 309
  []
 
 
 
 [19
 
- <./figs/metric.png> <./figs/truemetric.png>]
-Overfull \hbox (447.79398pt too wide) detected at line 362
-\OT1/mathkerncmss/m/sl/10.95 WhiletheAutoEncodedmetricsarealittlehardertointerpretduetononlinearcoordinatetransforms\OML/cmm/m/it/10.95 ; \OT1/mathkerncmss/m/sl/10.95 wecanstillseewhatmetricvalueswegetbyreinterpretingtheembeddingsunderthegroundtruthmetric
- []
-
-<figs/ae_metric.png, id=150, 1011.78pt x 578.16pt>
-File: figs/ae_metric.png Graphic file (type png)
-<use figs/ae_metric.png>
-Package pdftex.def Info: figs/ae_metric.png  used on input line 362.
-(pdftex.def)             Requested size: 398.3386pt x 227.62523pt.
-File: figs/truemetric.png Graphic file (type png)
-<use figs/truemetric.png>
-Package pdftex.def Info: figs/truemetric.png  used on input line 362.
-(pdftex.def)             Requested size: 398.3386pt x 227.62523pt.
-
-Overfull \vbox (416.74405pt too high) detected at line 362
+ <./figs/AE0PolarFig1.png> <./figs/AE1PolarChrist.png>]
+Overfull \vbox (68.0147pt too high) detected at line 339
  []
 
 
 
 [20
 
- <./figs/ae_metric.png>]
+]
+<figs/metric.png, id=141, 1011.78pt x 578.16pt>
+File: figs/metric.png Graphic file (type png)
+<use figs/metric.png>
+Package pdftex.def Info: figs/metric.png  used on input line 348.
+(pdftex.def)             Requested size: 278.83578pt x 159.33414pt.
+
+Overfull \vbox (27.48851pt too high) detected at line 348
+ []
+
+
 
 [21
 
-]
+ <./figs/metric.png>]
+<figs/truemetric.png, id=148, 1011.78pt x 578.16pt>
+File: figs/truemetric.png Graphic file (type png)
+<use figs/truemetric.png>
+Package pdftex.def Info: figs/truemetric.png  used on input line 356.
+(pdftex.def)             Requested size: 278.83578pt x 159.33414pt.
+
+Overfull \vbox (4.24442pt too high) detected at line 356
+ []
+
+
 
 [22
 
-]
+ <./figs/truemetric.png>]
+<figs/ae_metric.png, id=155, 1011.78pt x 578.16pt>
+File: figs/ae_metric.png Graphic file (type png)
+<use figs/ae_metric.png>
+Package pdftex.def Info: figs/ae_metric.png  used on input line 365.
+(pdftex.def)             Requested size: 278.83578pt x 159.33414pt.
+
+Overfull \vbox (40.99927pt too high) detected at line 365
+ []
+
+
 
 [23
 
-]
+ <./figs/ae_metric.png>]
+<figs/kindatrue_ae_metric.png, id=162, 1011.78pt x 578.16pt>
+File: figs/kindatrue_ae_metric.png Graphic file (type png)
+<use figs/kindatrue_ae_metric.png>
+Package pdftex.def Info: figs/kindatrue_ae_metric.png  used on input line 374.
+(pdftex.def)             Requested size: 278.83578pt x 159.33414pt.
+
+Overfull \vbox (43.12843pt too high) detected at line 374
+ []
+
+
 
 [24
 
+ <./figs/kindatrue_ae_metric.png>]
+
+[25
+
 ]
+
+[26
+
+]
+
+[27
+
+]
+
+[28
+
+]
+
+[29
+
+ <C:/Users/walnu/AppData/Local/Programs/MiKTeX/tex/latex/beamer/beamericonarticle.pdf>]
 \tf@nav=\write6
 \openout6 = `FinalPresentation.nav'.
 
@@ -999,21 +1030,31 @@ Overfull \vbox (416.74405pt too high) detected at line 362
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
-Package rerunfilecheck Info: File `FinalPresentation.out' has not changed.
-(rerunfilecheck)             Checksum: AC7E458860F154C7EB1565AEC823A2F7;361.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+
+Package rerunfilecheck Warning: File `FinalPresentation.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `FinalPresentation.out':
+(rerunfilecheck)             Before: D41D8CD98F00B204E9800998ECF8427E;0
+(rerunfilecheck)             After:  AC7E458860F154C7EB1565AEC823A2F7;361.
  ) 
 Here is how much of TeX's memory you used:
- 26022 strings out of 473530
- 527001 string characters out of 5714793
- 881393 words of memory out of 5000000
- 48657 multiletter control sequences out of 15000+600000
+ 26092 strings out of 473530
+ 528848 string characters out of 5714793
+ 878386 words of memory out of 5000000
+ 48712 multiletter control sequences out of 15000+600000
  577226 words of font info for 93 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  128i,13n,123p,1933b,756s stack positions out of 10000i,1000n,20000p,200000b,200000s
  <C:\Users\walnu\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcss1000.pk> <C:\Users\walnu\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcss1095.pk><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmss10.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmss12.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmss8.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmssbx10.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmssi10.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmssi8.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on FinalPresentation.pdf (24 pages, 1048168 bytes).
+Output written on FinalPresentation.pdf (29 pages, 1351061 bytes).
 PDF statistics:
- 256 PDF objects out of 1000 (max. 8388607)
- 52 named destinations out of 1000 (max. 500000)
- 92 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 289 PDF objects out of 1000 (max. 8388607)
+ 67 named destinations out of 1000 (max. 500000)
+ 73 words of extra memory for PDF output out of 10000 (max. 10000000)
 

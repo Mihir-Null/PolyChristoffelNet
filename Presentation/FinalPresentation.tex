@@ -34,20 +34,19 @@
 
 \begin{frame}{Why another dynamics model?}
 \begin{itemize}
-  \item Physics-style learning often wants \textbf{structure}, not just prediction:
+  \item Most current NNs are considered Black-Box simulators.
+  \item We know something useful hides in Latent Space (see AlexNet) but we can't extract it due to arbitrary nonlinearities.
+  \item Modern Models solve this by imposing structure on embeddings and evolutions.
+  \item Physics models such as HNNs/LNNs do this via:
   \begin{itemize}
     \item invariances, conservation laws, interpretable coefficients
     \item extrapolation beyond the training distribution
   \end{itemize}
-  \item Many neural dynamics models use generic nonlinearities with limited interpretability.
-  \item Goal here: make the \textbf{equations of motion} a first-class object:
-  \[
-    \text{learn } \Gamma(x) \text{ so that trajectories follow a geodesic equation.}
-  \]
+  \item However we suspect that the geometry of latent spaces encode these properties
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Geometric intuition: ``forces'' as coordinate effects}
+\begin{frame}{Geometric intuition: ``forces'' as coordinate effects and nonlinearity}
 \begin{itemize}
   \item A straight-line path in one coordinate system can look curved in another.
   \item Example: inertial motion in Cartesian becomes nontrivial in polar coordinates.
@@ -59,10 +58,14 @@
 \]
 \begin{itemize}
   \item Interpret $\Gamma^i_{\;jk}(x)$ as \textbf{state-dependent couplings} of velocities into acceleration.
+  \item Goal here: make the \textbf{equations of motion} a first-class object:
+  \[
+    \text{learn } \Gamma(x) \text{ so that trajectories follow a geodesic equation.}
+  \]
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Background: metric, connection, geodesics (minimal)}
+\begin{frame}{Graduate DiffGeom in 30 seconds: metric, connection, geodesics}
 \begin{itemize}
   \item A (pseudo-)Riemannian metric $g(x)$ defines local inner products:
   \[
@@ -136,7 +139,7 @@ This defines a deterministic vector field $f_\theta(z)$ where parameters are the
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Integrator: ResNet-style rollout (discrete geodesic flow)}
+\begin{frame}{Integrator: Scuffed ResNet rollout (discrete geodesic flow)}
 A simple differentiable integrator (semi-implicit Euler):
 \[
 v_{t+1}=v_t + \Delta t\,a(x_t,v_t),\quad
@@ -276,8 +279,6 @@ Use a synthetic benchmark with known Christoffels:
 \end{frame}
 
 \begin{frame}{Diagnostics I: Learned Christoffels vs. ground truth}
-\begin{columns}[T,onlytextwidth]
-  \column{0.49\textwidth}
   \textbf{What we plot}\\[0.25em]
   Evaluate the learned connection on a grid $(r,\theta)$ and extract:
   \[
@@ -295,21 +296,21 @@ Use a synthetic benchmark with known Christoffels:
     \item \textbf{Shape:} $\Gamma^r_{\theta\theta}$ should look like a linear ramp in $r$; $\Gamma^\theta_{r\theta}$ should decay like $1/r$.
     \item \textbf{Torsion-free check:} $\Gamma^\theta_{r\theta}\approx \Gamma^\theta_{\theta r}$.
   \end{itemize}
+\end{frame}
 
-  \column{0.51\textwidth}
-  \begin{figure}
+\begin{frame}{Christoffel Diagnostics}
+   \begin{figure}
     \centering
-    \includegraphics[width=\linewidth]{figs/AE0PolarFig1.png}
+    \includegraphics[width=0.7\linewidth]{figs/AE0PolarFig1.png}
     \caption{\scriptsize Learned vs. GT Christoffel components on $(r,\theta)$ grid.}
-    \includegraphics[width=\linewidth]{figs/AE1PolarChrist.png}
+    \includegraphics[width=0.7\linewidth]{figs/AE1PolarChrist.png}
     \caption{\scriptsize Learned vs. GT Christoffel components on \textbf{Embedded} $(r,\theta)$ grid.}
   \end{figure}
-\end{columns}
 \end{frame}
 
 \begin{frame}{Diagnostics II: Reconstructed metric and path-dependence (loop error)}
 \begin{columns}[T,onlytextwidth]
-  \column{0.49\textwidth}
+  \column{1.0\textwidth}
   \textbf{Metric target (polar plane)}\\[0.25em]
   The Euclidean metric in polar coordinates is:
   \[
@@ -334,30 +335,41 @@ Use a synthetic benchmark with known Christoffels:
     \]
     should be small if $\Gamma$ is close to Levi--Civita of some metric.
   \end{itemize}
-
-  \column{0.51\textwidth}
-  \begin{figure}
-    \centering
-    \includegraphics[width=\linewidth]{figs/metric.png}
-    \caption{\scriptsize Learned Metric}
-    \includegraphics[width=\linewidth]{figs/truemetric.png}
-    \caption{\scriptsize True Metric}
-    \caption{\scriptsize Reconstructed $g$ components and loop error heatmap.}
-  \end{figure}
 \end{columns}
 \end{frame}
 
-\begin{frame}{AutoEncoded metrics)}
-  \[
-  While the AutoEncoded metrics are a little harder to interpret due to nonlinear coordinate transforms, we can still see what metric values we get by reinterpreting the embeddings under the ground truth metric
-  \]
+\begin{frame}{Pretty Graphs Pt 2}
+  Reconstructed $g$ components and loop error heatmap.
+    \begin{figure}
+    \centering
+    \includegraphics[width=0.7\linewidth]{figs/metric.png}
+    \caption{\scriptsize Learned Metric}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{Pretty Graphs Pt 2 Pt 2}
   \begin{figure}
     \centering
-    \includegraphics[width=\linewidth]{figs/ae_metric.png}
-    \caption{\scriptsize Learned Metric}
-    \includegraphics[width=\linewidth]{figs/truemetric.png}
+    \includegraphics[width=0.7\linewidth]{figs/truemetric.png}
     \caption{\scriptsize True Metric}
-    \caption{\scriptsize Reconstructed $g$ components and loop error heatmap.}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{AutoEncoded metrics)}
+  While the AutoEncoded metrics are a little harder to interpret due to nonlinear coordinate transforms.
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.7\linewidth]{figs/ae_metric.png}
+    \caption{\scriptsize Learned Metric}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{AutoEncoded metrics)}
+  We can still see what metric values we get by reinterpreting the embeddings under the ground truth metric.
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.7\linewidth]{figs/kindatrue_ae_metric.png}
+    \caption{\scriptsize "True"*** Metric}
   \end{figure}
 \end{frame}
 
@@ -384,10 +396,10 @@ Use a synthetic benchmark with known Christoffels:
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Research directions (compact)}
+\begin{frame}{Research directions}
 \begin{itemize}
-    \item Enforce a Levi-Civita connection instead of just torsionlessness to ensure small closed loops return to the same point
-    \item Enforce a notion of "distance" via states through known equivalencies
+    \item \textbf{Metric Intervals:} Enforce a notion of "distance" via states through known equivalencies
+    \item \textbf{Lorentzian Geometry:} Allow reparametrization of evolution along axes other than time
   \item \textbf{Beyond geodesics:} add forcing/dissipation in a structured way
   (e.g., geodesic $+$ learned potential or Rayleigh dissipation term).
   \item \textbf{Better metrizability:} directly co-train $g(x)$ and enforce
@@ -408,5 +420,31 @@ Use a synthetic benchmark with known Christoffels:
   \item Natural next step: apply on strong latent spaces (e.g., CNN-based autoencoders) to learn \textbf{curved latent dynamics}.
 \end{itemize}
 \end{frame}
+
+\begin{frame}[allowframebreaks]{References}
+\small
+\begin{thebibliography}{9}
+\bibitem{chen2018node}
+T. Q. Chen, Y. Rubanova, J. Bettencourt, and D. Duvenaud,
+``Neural Ordinary Differential Equations,'' arXiv:1806.07366, 2018.
+
+\bibitem{greydanus2019hnn}
+S. Greydanus, M. Dzamba, and J. Yosinski,
+``Hamiltonian Neural Networks,'' arXiv:1906.01563, 2019.
+
+\bibitem{korman2021atlas}
+E. O. Korman,
+``Atlas Based Representation and Metric Learning on Manifolds,'' arXiv:2106.07062, 2021.
+
+\bibitem{burge2025ngf}
+J. B\"urge,
+``Neural geodesic flows,'' Master’s thesis, ETH Z\"urich, 2025.
+
+\bibitem{he2025lorentz}
+N. He, M. Yang, and R. Ying,
+``Lorentzian Residual Neural Networks,'' arXiv:2412.14695, 2025.
+\end{thebibliography}
+\end{frame}
+
 
 \end{document}
