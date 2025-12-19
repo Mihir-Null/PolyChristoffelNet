@@ -1,5 +1,6 @@
 # config.py
 from dataclasses import dataclass
+from dataclasses import field
 
 @dataclass
 class Signature:
@@ -30,7 +31,7 @@ class TrainConfig:
     # Metric reconstruction / pseudo-Riemannian checks
     use_metric_losses: bool = True
     metric_steps: int = 12
-    signature: Signature = Signature(p=2, q=0)  # default SPD for polar demo
+    signature: Signature = field(default_factory=lambda: Signature(p=2, q=0))  # default SPD for polar demo
 
     # Optimization
     epochs: int = 30
