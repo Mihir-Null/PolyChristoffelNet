@@ -2,6 +2,7 @@
 import argparse
 import torch
 import torch.nn as nn
+import os
 from torch.utils.data import DataLoader
 
 from config import TrainConfig, Signature
@@ -135,6 +136,11 @@ def main():
             total += float(loss.item())
 
         print(f"Epoch {ep:03d} | loss {total / len(dl):.6f}")
+        
+        # save new checkpoints
+        os.makedirs("checkpoints", exist_ok=True)
+        to_save = model.module.state_dict() if isinstance(model, nn.DataParallel) else model.state_dict()
+        torch.save({"model_state": to_save}, "checkpoints/latest.pt")
 
     print("Training complete.")
 
