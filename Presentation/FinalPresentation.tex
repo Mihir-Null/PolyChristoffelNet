@@ -85,7 +85,7 @@
 % =========================================================
 \section{Model}
 
-\begin{frame}{Model overview (one slide)}
+\begin{frame}{Model overview}
 \textbf{Inputs:} initial state/latent $x_0$, initial velocity $v_0$ (and optionally observed trajectory).\\
 \textbf{Learn:} a polynomial Christoffel field $\Gamma(x)$ (and optionally an autoencoder).
 
@@ -301,6 +301,8 @@ Use a synthetic benchmark with known Christoffels:
     \centering
     \includegraphics[width=\linewidth]{figs/AE0PolarFig1.png}
     \caption{\scriptsize Learned vs. GT Christoffel components on $(r,\theta)$ grid.}
+    \includegraphics[width=\linewidth]{figs/AE1PolarChrist.png}
+    \caption{\scriptsize Learned vs. GT Christoffel components on \textbf{Embedded} $(r,\theta)$ grid.}
   \end{figure}
 \end{columns}
 \end{frame}
@@ -334,7 +336,6 @@ Use a synthetic benchmark with known Christoffels:
   \end{itemize}
 
   \column{0.51\textwidth}
-  \textbf{Insert figure: Metric diagnostics}\\[0.25em]
   \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{figs/metric.png}
@@ -344,6 +345,20 @@ Use a synthetic benchmark with known Christoffels:
     \caption{\scriptsize Reconstructed $g$ components and loop error heatmap.}
   \end{figure}
 \end{columns}
+\end{frame}
+
+\begin{frame}{AutoEncoded metrics)}
+  \[
+  While the AutoEncoded metrics are a little harder to interpret due to nonlinear coordinate transforms, we can still see what metric values we get by reinterpreting the embeddings under the ground truth metric
+  \]
+  \begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{figs/ae_metric.png}
+    \caption{\scriptsize Learned Metric}
+    \includegraphics[width=\linewidth]{figs/truemetric.png}
+    \caption{\scriptsize True Metric}
+    \caption{\scriptsize Reconstructed $g$ components and loop error heatmap.}
+  \end{figure}
 \end{frame}
 
 % =========================================================

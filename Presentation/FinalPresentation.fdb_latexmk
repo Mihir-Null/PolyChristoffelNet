@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1766168580.34225 "e:/Data/Projects/PolyChristoffelNet/Presentation/FinalPresentation.tex" "FinalPresentation.pdf" "FinalPresentation" 1766168582.43386 0
+["pdflatex"] 1766169736.86311 "e:/Data/Projects/PolyChristoffelNet/Presentation/FinalPresentation.tex" "FinalPresentation.pdf" "FinalPresentation" 1766169739.61673 0
   "C:/Users/walnu/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1765843706 82686 2381c3433487640bf26aa76a10db7eb2 ""
   "C:/Users/walnu/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/tcss1000.pk" 1766162980 10628 f7eeb62a67ad0a42531f0e9391741328 ""
   "C:/Users/walnu/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/tcss1095.pk" 1766162981 11640 1ff0b46a0efb3d0502b3fd243b8542fc ""
@@ -241,12 +241,14 @@
   "C:/Users/walnu/AppData/Local/Programs/MiKTeX/tex/latex/translator/translator.sty" 1622471510 8765 56d370785f0143111ff9898b5adfe08e ""
   "C:/Users/walnu/AppData/Local/Programs/MiKTeX/tex/latex/url/url.sty" 1388490452 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "C:/Users/walnu/AppData/Local/Programs/MiKTeX/tex/latex/xcolor/xcolor.sty" 1729265222 55384 b454dec21c2d9f45ec0b793f0995b992 ""
-  "FinalPresentation.aux" 1766168582 4251 1c95bd8285ba8346be9f93bc6fe3814c "pdflatex"
-  "FinalPresentation.nav" 1766168582 2800 838555a91010a6d2f9c592dcdd43fe51 "pdflatex"
-  "FinalPresentation.out" 1766168582 361 ac7e458860f154c7eb1565aec823a2f7 "pdflatex"
-  "FinalPresentation.tex" 1766168579 14507 03469192bd55ac2059cfb68f1a4cb9fb ""
-  "e:/Data/Projects/PolyChristoffelNet/Presentation/FinalPresentation.tex" 1766168579 14507 03469192bd55ac2059cfb68f1a4cb9fb ""
+  "FinalPresentation.aux" 1766169739 4380 03b7f2c4cfe2fa6a7cfc41dcdd42c4ab "pdflatex"
+  "FinalPresentation.nav" 1766169739 2893 c38aa4625e2d81907d5055192a60df5d "pdflatex"
+  "FinalPresentation.out" 1766169739 361 ac7e458860f154c7eb1565aec823a2f7 "pdflatex"
+  "FinalPresentation.tex" 1766169736 15217 ae33994984056646510e7986f7f322ff ""
+  "e:/Data/Projects/PolyChristoffelNet/Presentation/FinalPresentation.tex" 1766169736 15217 ae33994984056646510e7986f7f322ff ""
   "figs/AE0PolarFig1.png" 1766167607 76658 9f9612eca0def2055d0af82478ad94d1 ""
+  "figs/AE1PolarChrist.png" 1766168669 81571 b0b931866e8ab87e2afe63fb135b8ddd ""
+  "figs/ae_metric.png" 1766169111 258458 399ba42eb8216c57c86cea1bf3e1509b ""
   "figs/metric.png" 1766167924 211863 851b8562e7a146d8d8155eb72160c9a3 ""
   "figs/truemetric.png" 1766167948 211565 38814fccbf318b30c9563e13f7f19bc1 ""
   (generated)
