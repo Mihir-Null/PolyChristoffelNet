@@ -114,6 +114,7 @@ def main():
                 check_finite("z0", z0)
                 check_finite("z1", z1)
                 check_finite("v0 (init vel)", v0)
+                v0_norm = torch.linalg.norm(v0, dim=-1)
                 if torch.isfinite(v0_norm).all():
                     if v0_norm.max().item() > 1e3:
                         print(f"[Warn] v0_norm max is huge: {v0_norm.max().item():.3e}")
