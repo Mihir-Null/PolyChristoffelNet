@@ -11,6 +11,7 @@ from data import PolarInertialDataset
 from model import FullGeoModel
 from metric_recon import reconstruct_metric_straight_path, reconstruct_metric_two_segment
 from losses import traj_mse, recon_mse, symmetry_loss, logabsdet_loss, signature_loss
+import math
 
 def parse_args():
     p = argparse.ArgumentParser()
@@ -20,6 +21,28 @@ def parse_args():
     p.add_argument("--q", type=int, default=0)
     p.add_argument("--epochs", type=int, default=30)
     return p.parse_args()
+
+#for NaN training errors
+def check_finite(name: str, t: torch.Tensor):
+    if t is None:
+        return
+    if not torch.isfinite(t).all():
+        # Safe-ish stats even if there are NaNs
+        finite = t[torch.isfinite(t)]
+        if finite.numel() > 0:
+            mn = finite.min().item()
+            mx = finite.max().item()
+        else:
+            mn = float("nan")
+            mx = float("nan")
+        print(f"\n[Non-finite] {name}: shape={tuple(t.shape)} dtype={t.dtype} device={t.device}")
+        print(f"  finite min={mn} finite max={mx}")
+        # Print a small sample
+        flat = t.flatten()
+        idx = torch.randint(0, flat.numel(), (min(8, flat.numel()),), device=flat.device)
+        print("  sample:", flat[idx].detach().cpu().tolist())
+        raise RuntimeError(f"Non-finite detected in {name}")
+
 
 def main():
     args = parse_args()
@@ -71,6 +94,7 @@ def main():
 
         for x_seq, dt in dl:
             x_seq = x_seq.to(device, non_blocking=True)  # (B,T,d)
+            check_finite("x_seq (input)", x_seq)
             dt = float(dt[0].item())  # same for all in batch
 
             opt.zero_grad(set_to_none=True)
@@ -78,14 +102,27 @@ def main():
             with torch.cuda.amp.autocast(enabled=(cfg.amp and device.type == "cuda")):
                 # 1) Encode to latent z(t)
                 z_true = model.module.encode_seq(x_seq) if isinstance(model, nn.DataParallel) else model.encode_seq(x_seq)
+                check_finite("z_true (encoded)", z_true)
+
 
                 # 2) Initial conditions for geodesic integration
                 z0 = z_true[:, 0, :]
                 z1 = z_true[:, 1, :]
                 v0 = (z1 - z0) / dt
 
+                #finity checks
+                check_finite("z0", z0)
+                check_finite("z1", z1)
+                check_finite("v0 (init vel)", v0)
+                if torch.isfinite(v0_norm).all():
+                    if v0_norm.max().item() > 1e3:
+                        print(f"[Warn] v0_norm max is huge: {v0_norm.max().item():.3e}")
+
+
                 # 3) Rollout geodesic in latent
                 z_pred = model.module.rollout(z0, v0, cfg.T, dt) if isinstance(model, nn.DataParallel) else model.rollout(z0, v0, cfg.T, dt)
+                check_finite("z_pred (rollout)", z_pred)
+
 
                 # 4) Primary loss:
                 #    - if AE on: decode z_pred and compare in x-space
@@ -95,6 +132,8 @@ def main():
                     loss_main = recon_mse(x_pred, x_seq)
                 else:
                     loss_main = traj_mse(z_pred, x_seq)
+                
+                check_finite("loss_main", loss_main.detach())
 
                 loss = loss_main
 
@@ -110,9 +149,14 @@ def main():
                     zm = z_true[:, cfg.T // 2, :]
 
                     christoffel = model.module.christoffel if isinstance(model, nn.DataParallel) else model.christoffel
+                    Gamma0 = christoffel(z0)
+                    check_finite("Gamma(z0)", Gamma0)
 
                     gA = reconstruct_metric_straight_path(christoffel, z_base, g0, zT, n_steps=cfg.metric_steps)
                     gB = reconstruct_metric_two_segment(christoffel, z_base, g0, zm, zT, n_steps=cfg.metric_steps)
+
+                    check_finite("gA (metric path A)", gA)
+                    check_finite("gB (metric path B)", gB)
 
                     loss_loop = ((gA - gB) ** 2).mean()
                     loss_sig = signature_loss(gA, cfg.signature)
