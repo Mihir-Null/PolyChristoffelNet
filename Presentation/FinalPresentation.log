@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2025.12.15)  19 DEC 2025 11:54
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2025.12.15)  19 DEC 2025 13:23
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**e:/Data/Projects/PolyChristoffelNet/FinalPresentation.tex
-(e:/Data/Projects/PolyChristoffelNet/FinalPresentation.tex
+**e:/Data/Projects/PolyChristoffelNet/Presentation/FinalPresentation.tex
+(e:/Data/Projects/PolyChristoffelNet/Presentation/FinalPresentation.tex
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
 (C:\Users\walnu\AppData\Local\Programs\MiKTeX\tex/latex/beamer\beamer.cls
@@ -909,20 +909,53 @@ File: ot1mathkerncmss.fd 2020/01/31 Fontinst v1.933 font definitions for OT1/mat
 [17
 
 ]
+<figs/AE0PolarFig1.png, id=129, 1011.78pt x 650.43pt>
+File: figs/AE0PolarFig1.png Graphic file (type png)
+<use figs/AE0PolarFig1.png>
+Package pdftex.def Info: figs/AE0PolarFig1.png  used on input line 306.
+(pdftex.def)             Requested size: 203.15048pt x 130.58984pt.
+
+Overfull \vbox (68.79158pt too high) detected at line 306
+ []
+
+
 
 [18
 
-]
+ <./figs/AE0PolarFig1.png>]
+<figs/metric.png, id=138, 1011.78pt x 578.16pt>
+File: figs/metric.png Graphic file (type png)
+<use figs/metric.png>
+Package pdftex.def Info: figs/metric.png  used on input line 347.
+(pdftex.def)             Requested size: 203.15048pt x 116.07986pt.
+<figs/truemetric.png, id=139, 1011.78pt x 578.16pt>
+File: figs/truemetric.png Graphic file (type png)
+<use figs/truemetric.png>
+Package pdftex.def Info: figs/truemetric.png  used on input line 347.
+(pdftex.def)             Requested size: 203.15048pt x 116.07986pt.
+
+Overfull \vbox (163.88446pt too high) detected at line 347
+ []
+
+
 
 [19
 
-]
+ <./figs/metric.png> <./figs/truemetric.png>]
 
 [20
 
 ]
 
 [21
+
+]
+
+[22
+
+]
+
+[23
 
 ]
 \tf@nav=\write6
@@ -943,17 +976,17 @@ Package rerunfilecheck Info: File `FinalPresentation.out' has not changed.
 (rerunfilecheck)             Checksum: AC7E458860F154C7EB1565AEC823A2F7;361.
  ) 
 Here is how much of TeX's memory you used:
- 25925 strings out of 473530
- 524817 string characters out of 5714793
- 877393 words of memory out of 5000000
- 48572 multiletter control sequences out of 15000+600000
- 573300 words of font info for 81 fonts, out of 8000000 for 9000
+ 26003 strings out of 473530
+ 526568 string characters out of 5714793
+ 881393 words of memory out of 5000000
+ 48640 multiletter control sequences out of 15000+600000
+ 576932 words of font info for 92 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 128i,13n,123p,1920b,756s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 128i,13n,123p,1933b,756s stack positions out of 10000i,1000n,20000p,200000b,200000s
  <C:\Users\walnu\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcss1000.pk> <C:\Users\walnu\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcss1095.pk><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmss10.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmss12.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmss8.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmssbx10.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmssi10.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmssi8.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on FinalPresentation.pdf (21 pages, 181408 bytes).
+Output written on FinalPresentation.pdf (23 pages, 704056 bytes).
 PDF statistics:
- 226 PDF objects out of 1000 (max. 8388607)
- 46 named destinations out of 1000 (max. 500000)
- 67 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 247 PDF objects out of 1000 (max. 8388607)
+ 50 named destinations out of 1000 (max. 500000)
+ 82 words of extra memory for PDF output out of 10000 (max. 10000000)
 

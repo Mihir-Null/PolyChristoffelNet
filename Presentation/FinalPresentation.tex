@@ -261,7 +261,7 @@ Given reconstructed $g(x)$:
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Sanity-check experiment: polar inertial motion}
+\begin{frame}{Proof of Concept experiment: polar inertial motion}
 Use a synthetic benchmark with known Christoffels:
 \[
 \Gamma^r_{\theta\theta}=-r,\qquad \Gamma^\theta_{r\theta}=\Gamma^\theta_{\theta r}= \frac{1}{r}
@@ -273,6 +273,77 @@ Use a synthetic benchmark with known Christoffels:
   \item Use diagnostics to compare learned components to ground truth.
   \item Verify torsion-free symmetry and reduced path dependence in reconstructed $g$.
 \end{itemize}
+\end{frame}
+
+\begin{frame}{Diagnostics I: Learned Christoffels vs. ground truth}
+\begin{columns}[T,onlytextwidth]
+  \column{0.49\textwidth}
+  \textbf{What we plot}\\[0.25em]
+  Evaluate the learned connection on a grid $(r,\theta)$ and extract:
+  \[
+    \Gamma^r_{\theta\theta}(r,\theta),\quad \Gamma^\theta_{r\theta}(r,\theta)
+  \]
+  Compare to ground truth:
+  \[
+    \Gamma^r_{\theta\theta}=-r,\qquad
+    \Gamma^\theta_{r\theta}=\frac{1}{r}.
+  \]
+  \vspace{0.25em}
+  \textbf{How to interpret}
+  \begin{itemize}
+    \item \textbf{$\theta$-invariance:} GT depends only on $r$, so learned heatmaps should be \emph{nearly constant across $\theta$}.
+    \item \textbf{Shape:} $\Gamma^r_{\theta\theta}$ should look like a linear ramp in $r$; $\Gamma^\theta_{r\theta}$ should decay like $1/r$.
+    \item \textbf{Torsion-free check:} $\Gamma^\theta_{r\theta}\approx \Gamma^\theta_{\theta r}$.
+  \end{itemize}
+
+  \column{0.51\textwidth}
+  \begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{figs/AE0PolarFig1.png}
+    \caption{\scriptsize Learned vs. GT Christoffel components on $(r,\theta)$ grid.}
+  \end{figure}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Diagnostics II: Reconstructed metric and path-dependence (loop error)}
+\begin{columns}[T,onlytextwidth]
+  \column{0.49\textwidth}
+  \textbf{Metric target (polar plane)}\\[0.25em]
+  The Euclidean metric in polar coordinates is:
+  \[
+    g(r,\theta)=
+    \begin{pmatrix}
+      1 & 0 \\
+      0 & r^2
+    \end{pmatrix}.
+  \]
+  We reconstruct $g$ from the learned $\Gamma$ by integrating metric-compatibility:
+  \[
+    \nabla g = 0 \quad\Rightarrow\quad \partial_i g_{jk} = \Gamma^\ell_{ij} g_{\ell k} + \Gamma^\ell_{ik} g_{j\ell}.
+  \]
+  \vspace{0.25em}
+  \textbf{How to interpret}
+  \begin{itemize}
+    \item \textbf{Diagonal structure:} $g_{r\theta}\approx 0$ (off-diagonal heatmap near zero).
+    \item \textbf{Component shapes:} $g_{rr}\approx 1$ (flat), $g_{\theta\theta}\propto r^2$ (quadratic in $r$).
+    \item \textbf{Path dependence:} reconstruct $g$ via two paths; the loop error
+    \[
+      \|g^{(A)}(x) - g^{(B)}(x)\|_F^2
+    \]
+    should be small if $\Gamma$ is close to Levi--Civita of some metric.
+  \end{itemize}
+
+  \column{0.51\textwidth}
+  \textbf{Insert figure: Metric diagnostics}\\[0.25em]
+  \begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{figs/metric.png}
+    \caption{\scriptsize Learned Metric}
+    \includegraphics[width=\linewidth]{figs/truemetric.png}
+    \caption{\scriptsize True Metric}
+    \caption{\scriptsize Reconstructed $g$ components and loop error heatmap.}
+  \end{figure}
+\end{columns}
 \end{frame}
 
 % =========================================================
