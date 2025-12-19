@@ -86,7 +86,7 @@ def main():
         model = nn.DataParallel(model)
 
     opt = torch.optim.Adam(model.parameters(), lr=cfg.lr)
-    scaler = torch.cuda.amp.GradScaler(enabled=(cfg.amp and device.type == "cuda"))
+    scaler = torch.amp.GradScaler('cuda',enabled=(cfg.amp and device.type == "cuda"))
 
     for ep in range(1, cfg.epochs + 1):
         model.train()
@@ -108,7 +108,13 @@ def main():
                 # 2) Initial conditions for geodesic integration
                 z0 = z_true[:, 0, :]
                 z1 = z_true[:, 1, :]
-                v0 = (z1 - z0) / dt
+                #general finite differences velocity
+                # v0 = (z1 - z0) / dt
+                #polar-specific safe velocity: r uses ordinary difference, theta uses wrapped difference
+                dr = (z1[:, 0] - z0[:, 0]) / dt
+                dtheta = torch.atan2(torch.sin(z1[:, 1] - z0[:, 1]), torch.cos(z1[:, 1] - z0[:, 1]))
+                dtheta = dtheta / dt
+                v0 = torch.stack([dr, dtheta], dim=-1)
 
                 #finity checks
                 check_finite("z0", z0)

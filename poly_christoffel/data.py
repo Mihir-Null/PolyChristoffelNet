@@ -42,7 +42,7 @@ class PolarInertialDataset(Dataset):
 
         r = torch.sqrt(x * x + y * y)
         theta = torch.atan2(y, x)
-        theta = unwrap_angle(theta, dim=1)
+        # theta = unwrap_angle(theta, dim=1) -> making training unstable, check math later
 
         z = torch.stack([r, theta], dim=-1)  # (N,T,2)
         self.x_seq = z

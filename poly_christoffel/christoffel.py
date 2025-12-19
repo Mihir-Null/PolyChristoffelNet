@@ -15,7 +15,7 @@ class ChristoffelPoly(nn.Module):
         self.phi = PolyFeatures(d, degree)
         M = self.phi.M
         # Coeff tensor C[i,j,k,m]
-        self.C = nn.Parameter(0.01 * torch.randn(d, d, d, M))
+        self.C = nn.Parameter(1e-4 * torch.randn(d, d, d, M))
 
     def forward(self, z: torch.Tensor) -> torch.Tensor:
         """

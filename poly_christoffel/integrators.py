@@ -19,31 +19,36 @@ def geodesic_accel(Gamma: torch.Tensor, v: torch.Tensor) -> torch.Tensor:
 
 def rollout_geodesic_resnet(
     christoffel_model,
-    z0: torch.Tensor,
-    v0: torch.Tensor,
-    T: int,
-    dt: float,
-    manifold: Manifold,
-    project_each_step: bool = True,
-) -> torch.Tensor:
-    """
-    Batched rollout. Returns z_pred: (B,T,d).
-    If manifold != none and project_each_step=True, we reproject (retraction) each step.
-    """
+    z0, v0, T, dt,
+    manifold,
+    project_each_step=True,
+    substeps: int = 4,
+    vmax: float = 50.0,
+    gamma_max: float = 50.0,
+):
     z = manifold.project(z0)
     v = manifold.tangent_project(z, v0)
 
     traj = [z.unsqueeze(1)]
-    for _ in range(1, T):
-        Gamma = christoffel_model(z)
-        a = geodesic_accel(Gamma, v)
-        v = v + dt * a
-        z = z + dt * v
+    h = dt / substeps
 
-        if project_each_step:
-            z = manifold.project(z)
-            v = manifold.tangent_project(z, v)
+    for _ in range(1, T):
+        for _s in range(substeps):
+            Gamma = christoffel_model(z)
+            # keep Christoffels from exploding early in training
+            Gamma = torch.clamp(Gamma, -gamma_max, gamma_max)
+
+            a = geodesic_accel(Gamma, v)
+            v = v + h * a
+            v = torch.clamp(v, -vmax, vmax)
+
+            z = z + h * v
+
+            if project_each_step:
+                z = manifold.project(z)
+                v = manifold.tangent_project(z, v)
 
         traj.append(z.unsqueeze(1))
 
     return torch.cat(traj, dim=1)
+
