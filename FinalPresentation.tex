@@ -1,0 +1,326 @@
+\documentclass[aspectratio=169]{beamer}
+
+% -------------------------
+% Theme / packages
+% -------------------------
+\usetheme{metropolis}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{booktabs}
+
+\title{PolyChristoffel Networks}
+\subtitle{Obtaining latent manifolds via curvature learning}
+\author{Mihir Talati}
+\date{\today}
+
+% -------------------------
+% Helpful macros
+% -------------------------
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\dd}{\,\mathrm{d}}
+\newcommand{\Gammaijk}{\Gamma^i_{\;jk}}
+\newcommand{\vx}{\dot{x}}
+\newcommand{\vxx}{\ddot{x}}
+
+\begin{document}
+
+\maketitle
+
+% =========================================================
+% SECTION 1: MOTIVATION + BASIC BACKGROUND / INTUITION
+% =========================================================
+\section{Motivation \& Intuition}
+
+\begin{frame}{Why another dynamics model?}
+\begin{itemize}
+  \item Physics-style learning often wants \textbf{structure}, not just prediction:
+  \begin{itemize}
+    \item invariances, conservation laws, interpretable coefficients
+    \item extrapolation beyond the training distribution
+  \end{itemize}
+  \item Many neural dynamics models use generic nonlinearities with limited interpretability.
+  \item Goal here: make the \textbf{equations of motion} a first-class object:
+  \[
+    \text{learn } \Gamma(x) \text{ so that trajectories follow a geodesic equation.}
+  \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Geometric intuition: ``forces'' as coordinate effects}
+\begin{itemize}
+  \item A straight-line path in one coordinate system can look curved in another.
+  \item Example: inertial motion in Cartesian becomes nontrivial in polar coordinates.
+  \item The apparent ``forces'' come from geometry via \textbf{Christoffel symbols}.
+\end{itemize}
+\vspace{0.5em}
+\[
+\vxx^i + \Gamma^i_{\;jk}(x)\,\vx^j \vx^k = 0
+\]
+\begin{itemize}
+  \item Interpret $\Gamma^i_{\;jk}(x)$ as \textbf{state-dependent couplings} of velocities into acceleration.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Background: metric, connection, geodesics (minimal)}
+\begin{itemize}
+  \item A (pseudo-)Riemannian metric $g(x)$ defines local inner products:
+  \[
+  \langle u, v\rangle_x = u^\top g(x)\,v
+  \]
+  \item The Levi--Civita connection (torsion-free, metric-compatible) yields Christoffels:
+  \[
+  \Gamma^i_{\;jk}(g)=\tfrac12 g^{i\ell}
+  \Big(\partial_j g_{k\ell}+\partial_k g_{j\ell}-\partial_\ell g_{jk}\Big)
+  \]
+  \item Geodesics are ``straightest'' paths under that connection:
+  \[
+  \vxx^i + \Gamma^i_{\;jk}(x)\,\vx^j \vx^k = 0.
+  \]
+\end{itemize}
+\end{frame}
+
+% =========================================================
+% SECTION 2: MODEL EXPLANATION (majority)
+% =========================================================
+\section{Model}
+
+\begin{frame}{Model overview (one slide)}
+\textbf{Inputs:} initial state/latent $x_0$, initial velocity $v_0$ (and optionally observed trajectory).\\
+\textbf{Learn:} a polynomial Christoffel field $\Gamma(x)$ (and optionally an autoencoder).
+
+\vspace{0.75em}
+\begin{center}
+\begin{tabular}{@{}c@{}c@{}c@{}}
+Observed $y_t$ & \hspace{0.5em} & Latent/state $x_t$ \\
+\hline
+$x_t=E(y_t)$ & $\Rightarrow$ & $\Gamma(x)$ produces geodesic rollout $\hat{x}_{0:T}$ \\
+$\hat{y}_t=D(\hat{x}_t)$ & & Losses enforce dynamics + metric consistency
+\end{tabular}
+\end{center}
+
+\vspace{0.5em}
+\textbf{Design principle:} keep the dynamics layer interpretable by making $\Gamma(x)$ a low-degree polynomial.
+\end{frame}
+
+\begin{frame}{Parameterization: polynomial Christoffel network}
+Let $x\in\R^d$. Build monomial features $\phi(x)\in\R^P$ (degree $\le p$):
+\[
+\phi(x)=\big[1,\; x_1,\dots,x_d,\; x_1^2,\; x_1x_2,\dots\big].
+\]
+Then define
+\[
+\Gamma^i_{\;jk}(x) = \sum_{m=1}^{P} C^i_{\;jk,m}\,\phi_m(x).
+\]
+\begin{itemize}
+  \item $C^i_{\;jk,m}$ are trainable coefficients (directly interpretable).
+  \item Enforce torsion-free symmetry by construction:
+  \[
+  \Gamma^i_{\;jk} = \Gamma^i_{\;kj}.
+  \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Dynamics block: geodesic equation as a neural layer}
+Use first-order state $z=(x,v)$ with $v=\dot{x}$:
+\[
+\dot{x}=v,\qquad \dot{v}^i = -\Gamma^i_{\;jk}(x)\,v^j v^k.
+\]
+This defines a deterministic vector field $f_\theta(z)$ where parameters are the polynomial coefficients.
+
+\vspace{0.5em}
+\textbf{Interpretability:}
+\begin{itemize}
+  \item acceleration is quadratic in velocity and structured by $\Gamma(x)$
+  \item no arbitrary activation needed in the dynamics law
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Integrator: ResNet-style rollout (discrete geodesic flow)}
+A simple differentiable integrator (semi-implicit Euler):
+\[
+v_{t+1}=v_t + \Delta t\,a(x_t,v_t),\quad
+x_{t+1}=x_t + \Delta t\,v_{t+1},
+\]
+where
+\[
+a^i(x,v) = -\Gamma^i_{\;jk}(x)\,v^j v^k.
+\]
+
+\begin{itemize}
+  \item Equivalent to stacking residual blocks with shared parameters.
+  \item Stable, CUDA-friendly, easy to backprop through long rollouts.
+  \item Later swap-in: RK4 / differentiable ODE solvers if needed.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Optional: jointly learned autoencoder with manifold constraint}
+When observations live in $y$-space (images, fields, etc.), use an encoder/decoder:
+\[
+x_t = E_\psi(y_t),\qquad \hat{y}_t = D_\psi(\hat{x}_t).
+\]
+To enforce latent validity on a chosen manifold $\mathcal{M}$:
+\[
+x \leftarrow \Pi_{\mathcal{M}}(x)
+\]
+(e.g., sphere projection, hyperboloid retraction).\\
+
+\begin{itemize}
+  \item Joint training: geometry losses backprop through $E_\psi$.
+  \item Encourages a chart where dynamics are ``as geodesic as possible.''
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Why metric reconstruction / pseudo-Riemannian regularization?}
+Learning $\Gamma(x)$ freely can fit trajectories but yield a connection that is not Levi--Civita of any metric.
+
+\vspace{0.5em}
+To encourage a \textbf{(pseudo-)Riemannian interpretation}, impose constraints consistent with:
+\begin{itemize}
+  \item torsion-free: $\Gamma^i_{\;jk}=\Gamma^i_{\;kj}$
+  \item metric compatibility: $\nabla g = 0$
+  \item fixed signature $(p,q)$, non-degeneracy ($\det g \neq 0$)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Metric reconstruction idea: integrate the compatibility equation}
+Metric compatibility in coordinates:
+\[
+\partial_i g_{jk} = \Gamma^\ell_{\;ij}\,g_{\ell k} + \Gamma^\ell_{\;ik}\,g_{j\ell}.
+\]
+Treat this as a (path) ODE along a curve $x(s)$ from a basepoint $x_0$:
+\[
+\frac{\dd}{\dd s}g_{jk}(s)
+=
+\Big(\Gamma^\ell_{\;ij}(x(s))g_{\ell k}(s) + \Gamma^\ell_{\;ik}(x(s))g_{j\ell}(s)\Big)\frac{\dd x^i}{\dd s}.
+\]
+
+\begin{itemize}
+  \item Choose $g(x_0)=g_0$ with fixed signature; integrate to get $g(x)$.
+  \item If $\Gamma$ is not metric-realizable, the reconstructed $g(x)$ becomes \textbf{path-dependent}.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Consistency loss: penalize path dependence (loop loss)}
+Compute $g(x)$ via two different paths:
+\begin{itemize}
+  \item Path A: straight line $x_0 \to x$
+  \item Path B: two-segment $x_0 \to x_m \to x$
+\end{itemize}
+Then define:
+\[
+\mathcal{L}_{\text{loop}} = \|g^{(A)}(x) - g^{(B)}(x)\|_F^2.
+\]
+\textbf{Interpretation:}
+\begin{itemize}
+  \item pushes $\Gamma(x)$ toward connections that preserve some bilinear form
+  \item provides extra signal even if you only supervise trajectories
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Pseudo-Riemannian validity losses (practical)}
+Given reconstructed $g(x)$:
+\begin{itemize}
+  \item Symmetry:
+  \[
+  \mathcal{L}_{\text{sym}}=\|g-g^\top\|_F^2
+  \]
+  \item Non-degeneracy barrier (avoid singular metric):
+  \[
+  \mathcal{L}_{\det} = \text{softplus}\big(\alpha - \log|\det g|\big)
+  \]
+  \item Fixed signature $(p,q)$ via eigenvalue sign penalties:
+  \[
+  \mathcal{L}_{\text{sig}}=\sum_{i=1}^d \text{softplus}\big(-\beta\, s_i\lambda_i(g)\big),
+  \quad s_i\in\{+1,-1\}.
+  \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Overall objective and training loop}
+\textbf{Primary fit:} match trajectories (latent or decoded):
+\[
+\mathcal{L}_{\text{traj}}=\frac{1}{T}\sum_{t}\|\hat{x}_t-x_t\|^2
+\quad \text{or}\quad
+\mathcal{L}_{\text{recon}}=\frac{1}{T}\sum_{t}\|D(\hat{x}_t)-y_t\|^2.
+\]
+\textbf{Regularize geometry:}
+\[
+\mathcal{L}
+=
+\mathcal{L}_{\text{traj/recon}}
++\lambda_{\text{loop}}\mathcal{L}_{\text{loop}}
++\lambda_{\det}\mathcal{L}_{\det}
++\lambda_{\text{sig}}\mathcal{L}_{\text{sig}}
++\lambda \|C\|_2^2.
+\]
+
+\begin{itemize}
+  \item Backprop through (i) rollout integrator and (ii) metric reconstruction.
+  \item Coefficients $C$ remain interpretable (polynomial terms in $\Gamma$).
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Sanity-check experiment: polar inertial motion}
+Use a synthetic benchmark with known Christoffels:
+\[
+\Gamma^r_{\theta\theta}=-r,\qquad \Gamma^\theta_{r\theta}=\Gamma^\theta_{\theta r}= \frac{1}{r}
+\]
+(others $=0$), derived from Euclidean plane in polar coordinates.
+
+\begin{itemize}
+  \item Train $\Gamma(x)$ to reproduce trajectories.
+  \item Use diagnostics to compare learned components to ground truth.
+  \item Verify torsion-free symmetry and reduced path dependence in reconstructed $g$.
+\end{itemize}
+\end{frame}
+
+% =========================================================
+% SECTION 3: FUTURE DIRECTIONS
+% =========================================================
+\section{Future Directions}
+
+\begin{frame}{Scaling up: leverage strong autoencoders (CNNs, etc.)}
+\begin{itemize}
+  \item Many domains already have excellent representation learners:
+  \begin{itemize}
+    \item CNN autoencoders / VAEs for images and fields
+    \item pretrained encoders with semantic latent factors
+  \end{itemize}
+  \item Proposal: \textbf{freeze or lightly finetune} an existing encoder/decoder,
+  then learn $\Gamma(x)$ (and optionally $g(x)$) on the latent manifold to obtain:
+  \begin{itemize}
+    \item interpretable latent dynamics
+    \item geometry-aware interpolation/extrapolation (geodesics)
+    \item constraints like signature / nondegeneracy for stability
+  \end{itemize}
+  \item The notion of enforcing a Pseudo-Riemannian metric alsso defines a consistent, invariant dot product for vectors at any point on the manifold, which is also precisely how many encoders are trained (e.g in NLP)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Research directions (compact)}
+\begin{itemize}
+    \item Enforce a Levi-Civita connection instead of just torsionlessness to ensure small closed loops return to the same point
+    \item Enforce a notion of "distance" via states through known equivalencies
+  \item \textbf{Beyond geodesics:} add forcing/dissipation in a structured way
+  (e.g., geodesic $+$ learned potential or Rayleigh dissipation term).
+  \item \textbf{Better metrizability:} directly co-train $g(x)$ and enforce
+  $\Gamma_{\text{poly}}\approx \Gamma(g)$ to guarantee Levi--Civita structure.
+  \item \textbf{Topology/coverage:} multiple charts or implicit atlas, while retaining interpretability.
+  \item \textbf{Stochastic extensions:} geodesic drift with learned diffusion (SDE in latent).
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Takeaways}
+\begin{itemize}
+  \item Christoffel symbols provide an interpretable parameterization of dynamics:
+  \[
+  \vxx^i = -\Gamma^i_{\;jk}(x)\,\vx^j\vx^k
+  \]
+  \item Polynomial $\Gamma(x)$ yields a small, inspectable model with calculus-friendly smoothness.
+  \item Metric reconstruction and pseudo-Riemannian regularizers provide extra training signals and geometric validity checks.
+  \item Natural next step: apply on strong latent spaces (e.g., CNN-based autoencoders) to learn \textbf{curved latent dynamics}.
+\end{itemize}
+\end{frame}
+
+\end{document}
