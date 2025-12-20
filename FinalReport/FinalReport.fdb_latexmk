@@ -1,13 +1,13 @@
 # Fdb version 4
-["bibtex FinalReport"] 1766199394.36391 "FinalReport.aux" "FinalReport.bbl" "FinalReport" 1766199396.48579 0
+["bibtex FinalReport"] 1766199394.36391 "FinalReport.aux" "FinalReport.bbl" "FinalReport" 1766199579.94408 0
   "./FinalReport.bib" 1766196017 1035 64cdcf1657220e59a4fca9f80bed54fc ""
   "C:/Users/walnu/AppData/Local/Programs/MiKTeX/bibtex/bst/bibtex/plain.bst" 1291864736 20613 bd3fbfa9f64872b81ac57a0dd2ed855f ""
-  "FinalReport.aux" 1766199395 4968 aa1d4252bd20405a74ae0538d157c447 "pdflatex"
+  "FinalReport.aux" 1766199579 4968 aa1d4252bd20405a74ae0538d157c447 "pdflatex"
   (generated)
   "FinalReport.bbl"
   "FinalReport.blg"
   (rewritten before read)
-["pdflatex"] 1766199394.58552 "e:/Data/Projects/PolyChristoffelNet/FinalReport/FinalReport.tex" "FinalReport.pdf" "FinalReport" 1766199396.48645 0
+["pdflatex"] 1766199578.09727 "e:/Data/Projects/PolyChristoffelNet/FinalReport/FinalReport.tex" "FinalReport.pdf" "FinalReport" 1766199579.94464 0
   "C:/Users/walnu/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1766199168 82686 2381c3433487640bf26aa76a10db7eb2 ""
   "C:/Users/walnu/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1765812658 12017796 ee11b9f2d095be8d935e7a1c21c4a597 ""
   "C:/Users/walnu/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc" 1458473887 4993 80dc9bab7f31fb78a000ccfed0e27cab ""
@@ -134,12 +134,12 @@
   "C:/Users/walnu/AppData/Local/Programs/MiKTeX/tex/latex/url/url.sty" 1388490452 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "C:/Users/walnu/AppData/Local/Programs/MiKTeX/tex/latex/xcolor/xcolor.sty" 1729265222 55384 b454dec21c2d9f45ec0b793f0995b992 ""
   "C:/Users/walnu/AppData/Local/Programs/MiKTeX/tex/latex/xkeyval/xkeyval.sty" 1656236919 4937 4ce600ce9bd4ec84d0250eb6892fcf4f ""
-  "FinalReport.aux" 1766199395 4968 aa1d4252bd20405a74ae0538d157c447 "pdflatex"
+  "FinalReport.aux" 1766199579 4968 aa1d4252bd20405a74ae0538d157c447 "pdflatex"
   "FinalReport.bbl" 1766199394 874 767b0542f0bc6f4af76de26c6a28242d "bibtex FinalReport"
   "FinalReport.bib" 1766196017 1035 64cdcf1657220e59a4fca9f80bed54fc ""
-  "FinalReport.out" 1766199395 1892 6f9cc47407a43c90d80d6a2f653f6de2 "pdflatex"
-  "FinalReport.tex" 1766199392 22351 1b3e855db3d5ee0789b052bf63ba5421 ""
-  "e:/Data/Projects/PolyChristoffelNet/FinalReport/FinalReport.tex" 1766199392 22351 1b3e855db3d5ee0789b052bf63ba5421 ""
+  "FinalReport.out" 1766199579 1892 6f9cc47407a43c90d80d6a2f653f6de2 "pdflatex"
+  "FinalReport.tex" 1766199577 22471 7563248d296b2816709bd6c0dd59504f ""
+  "e:/Data/Projects/PolyChristoffelNet/FinalReport/FinalReport.tex" 1766199577 22471 7563248d296b2816709bd6c0dd59504f ""
   "figs/AE1Polar_Christ.png" 1766198047 158832 b222e1dd875b9d83818890e1f9a08071 ""
   "figs/AE1Polar_G.png" 1766198126 216912 7c5f22fc1e0926d5162c878eda66879d ""
   "usenix2019_v3.sty" 1765843561 3795 62775b94e6f3aaf4bda0ce3e06335b5f ""
