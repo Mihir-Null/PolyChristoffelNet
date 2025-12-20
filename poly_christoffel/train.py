@@ -108,13 +108,17 @@ def main():
                 # 2) Initial conditions for geodesic integration
                 z0 = z_true[:, 0, :]
                 z1 = z_true[:, 1, :]
-                #general finite differences velocity
+                if cfg.use_ae:
+                    # General finite-difference velocity for arbitrary latent coordinates.
+                    v0 = (z1 - z0) / dt
+                else:
+                    # Polar-specific safe velocity: r uses ordinary difference, theta uses wrapped difference.
+                    dr = (z1[:, 0] - z0[:, 0]) / dt
+                    dtheta = torch.atan2(torch.sin(z1[:, 1] - z0[:, 1]), torch.cos(z1[:, 1] - z0[:, 1]))
+                    dtheta = dtheta / dt
+                    v0 = torch.stack([dr, dtheta], dim=-1)
+                # Old always-general velocity (kept for easy reversion):
                 # v0 = (z1 - z0) / dt
-                #polar-specific safe velocity: r uses ordinary difference, theta uses wrapped difference
-                dr = (z1[:, 0] - z0[:, 0]) / dt
-                dtheta = torch.atan2(torch.sin(z1[:, 1] - z0[:, 1]), torch.cos(z1[:, 1] - z0[:, 1]))
-                dtheta = dtheta / dt
-                v0 = torch.stack([dr, dtheta], dim=-1)
 
                 #finity checks
                 check_finite("z0", z0)

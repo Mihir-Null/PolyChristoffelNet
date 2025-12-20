@@ -1,0 +1,42 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{greydanus2019hnn}
+\citation{chen2018node}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2}Geometric background}{1}{section.2}\protected@file@percent }
+\newlabel{eq:geodesic}{{1}{1}{Geometric background}{equation.1}{}}
+\newlabel{eq:accel}{{2}{1}{Geometric background}{equation.2}{}}
+\newlabel{eq:metriccompat}{{3}{1}{Geometric background}{equation.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Model: Polynomial Christoffel network}{1}{section.3}\protected@file@percent }
+\newlabel{eq:gamma_poly}{{6}{2}{Model: Polynomial Christoffel network}{equation.6}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Discrete geodesic rollout}{2}{section.4}\protected@file@percent }
+\newlabel{eq:integrator}{{8}{2}{Discrete geodesic rollout}{equation.8}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Metric reconstruction and geometric regularizers}{2}{section.5}\protected@file@percent }
+\newlabel{eq:metric_ode}{{9}{2}{Metric reconstruction and geometric regularizers}{equation.9}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Training objective}{2}{section.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7}Backpropagation and Autodiff}{2}{section.7}\protected@file@percent }
+\citation{}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.1}Autoencoder latent-space variant (AE=1)}{3}{subsection.7.1}\protected@file@percent }
+\newlabel{subsec:polar_ae_results}{{7.1}{3}{Autoencoder latent-space variant (AE=1)}{subsection.7.1}{}}
+\@writefile{toc}{\contentsline {paragraph}{Trajectory fidelity improves substantially.}{3}{section*.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Latent-space geometry is metrizable and well-conditioned.}{3}{section*.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Interpreting Christoffels/metrics under AE.}{3}{section*.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Rollout-state evaluation metrics from \texttt  {evaluate.py}. AE=1 substantially improves rollout accuracy and stabilizes metric reconstruction (low path dependence and correct SPD signature). Entries marked ``--'' are not directly comparable in AE mode because learned latent coordinates change the coordinate expression of $\Gamma $ and acceleration unless pullback-to-$x$ diagnostics are used.}}{3}{table.1}\protected@file@percent }
+\newlabel{tab:polar_metrics_compare}{{1}{3}{Rollout-state evaluation metrics from \texttt {evaluate.py}. AE=1 substantially improves rollout accuracy and stabilizes metric reconstruction (low path dependence and correct SPD signature). Entries marked ``--'' are not directly comparable in AE mode because learned latent coordinates change the coordinate expression of $\Gamma $ and acceleration unless pullback-to-$x$ diagnostics are used}{table.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces AE=1 Christoffel diagnostics (latent coordinates). Note that direct comparison to polar coordinate ground truth is not coordinate-invariant and is shown primarily for visualization. The key empirical improvement under AE is not exact component matching, but improved rollout accuracy and stable metric reconstruction with low path dependence.}}{4}{figure.1}\protected@file@percent }
+\newlabel{fig:polar_ae_christoffels}{{1}{4}{AE=1 Christoffel diagnostics (latent coordinates). Note that direct comparison to polar coordinate ground truth is not coordinate-invariant and is shown primarily for visualization. The key empirical improvement under AE is not exact component matching, but improved rollout accuracy and stable metric reconstruction with low path dependence}{figure.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces AE=1 metric reconstruction diagnostics in latent space. The loop/path-dependence map is uniformly small, and eigenvalue checks confirm an SPD metric across the evaluated grid.}}{5}{figure.2}\protected@file@percent }
+\newlabel{fig:polar_ae_metric}{{2}{5}{AE=1 metric reconstruction diagnostics in latent space. The loop/path-dependence map is uniformly small, and eigenvalue checks confirm an SPD metric across the evaluated grid}{figure.2}{}}
+\citation{korman2021atlas}
+\citation{burge2025ngf}
+\bibstyle{plain}
+\bibdata{FinalReport}
+\bibcite{burge2025ngf}{1}
+\bibcite{chen2018node}{2}
+\bibcite{greydanus2019hnn}{3}
+\bibcite{korman2021atlas}{4}
+\@writefile{toc}{\contentsline {section}{\numberline {8}Limitations and future work}{6}{section.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {A}Implementation details}{6}{appendix.A}\protected@file@percent }
+\gdef \@abspage@last{6}

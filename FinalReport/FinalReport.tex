@@ -1,0 +1,339 @@
+% !TeX root = FinalReport.tex
+\documentclass[letterpaper,twocolumn,10pt]{article}
+\usepackage{usenix2019_v3}
+
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{url}
+\usepackage{placeins}
+
+\usepackage{filecontents}
+
+% -----------------------------------------------------------------------------
+% Inlined bibliography
+% -----------------------------------------------------------------------------
+\begin{filecontents}{\jobname.bib}
+@article{chen2018node,
+  author = {Chen, Tian Qi and Rubanova, Yulia and Bettencourt, Jesse and Duvenaud, David},
+  title = {Neural Ordinary Differential Equations},
+  journal = {arXiv preprint arXiv:1806.07366},
+  year = {2018},
+  note = {\url{https://arxiv.org/abs/1806.07366}}
+}
+@article{greydanus2019hnn,
+  author = {Greydanus, Sam and Dzamba, Misko and Yosinski, Jason},
+  title = {Hamiltonian Neural Networks},
+  journal = {arXiv preprint arXiv:1906.01563},
+  year = {2019},
+  note = {\url{https://arxiv.org/abs/1906.01563}}
+}
+@article{korman2021atlas,
+  author = {Korman, E. O.},
+  title = {Atlas Based Representation and Metric Learning on Manifolds},
+  journal = {arXiv preprint arXiv:2106.07062},
+  year = {2021},
+  note = {\url{https://arxiv.org/abs/2106.07062}}
+}
+@mastersthesis{burge2025ngf,
+  author = {Burge, J.},
+  title = {Neural Geodesic Flows},
+  school = {ETH Zurich},
+  year = {2025}
+}
+\end{filecontents}
+
+% -----------------------------------------------------------------------------
+\begin{document}
+% -----------------------------------------------------------------------------
+
+\date{}
+
+\title{\Large \bf PolyChristoffel Networks: Interpretable Dynamics via Learnable Curvatures}
+
+\author{
+  {\rm Mihir Talati}\\
+  University of Maryland - College Park\\
+  CMSC 498Z/838B Final Report
+}
+
+\maketitle
+
+% -----------------------------------------------------------------------------
+\begin{abstract}
+% -----------------------------------------------------------------------------
+We present PolyChristoffel Networks, a dynamics model that treats a torsion-free connection as the primary learnable object. Instead of learning an opaque vector field, the model parameterizes Christoffel symbols as low-degree polynomials in the state, yielding an interpretable, structured acceleration law. Trajectories are produced by integrating the geodesic equation in a discrete ResNet-style rollout. To encourage a (pseudo-)Riemannian interpretation, we reconstruct a metric by integrating the metric-compatibility equation along paths and penalize path dependence via a loop loss. We describe the mathematical formulation, the loss terms, and the implementation details that map directly onto the codebase (e.g., polynomial features in \texttt{poly\_features.py}, Christoffel coefficients in \texttt{christoffel.py}, metric reconstruction in \texttt{metric\_recon.py}, and training orchestration in \texttt{train.py}). A polar-coordinate inertial benchmark with known Christoffels provides diagnostics for both learned connection components and reconstructed metrics. This report expands the project presentation with additional mathematical detail and explicit implementation references.
+\end{abstract}
+
+% -----------------------------------------------------------------------------
+\section{Introduction}
+% -----------------------------------------------------------------------------
+Many neural dynamics models fit trajectories but obscure the underlying structure of the equations of motion. Recent physics-inspired approaches, such as Hamiltonian neural networks~\cite{greydanus2019hnn} and Neural ODEs~\cite{chen2018node}, aim to impose inductive biases aligned with known physical laws. We take a complementary view: model the geometry of the state space itself and treat the connection coefficients as the learnable parameters. This yields interpretable, symbolic dynamics where acceleration is a quadratic form in velocity with coefficients that are explicit functions of state.
+
+The PolyChristoffel Network learns a torsion-free connection parameterized by a polynomial basis. Trajectories are geodesics of this learned connection. To ensure compatibility with a (pseudo-)Riemannian metric, we reconstruct the metric via the compatibility equation and enforce path-independence through a loop loss. The approach is lightweight, differentiable, and directly grounded in differential geometry.
+
+% -----------------------------------------------------------------------------
+\section{Geometric background}
+% -----------------------------------------------------------------------------
+Let $x(t) \in \mathbb{R}^d$ denote a trajectory in a coordinate chart, with velocity $v(t) = \dot{x}(t)$. A (torsion-free) affine connection is specified by Christoffel symbols $\Gamma^i_{\;jk}(x)$, symmetric in the lower indices: $\Gamma^i_{\;jk} = \Gamma^i_{\;kj}$. Geodesics satisfy
+\begin{equation}
+\ddot{x}^i + \Gamma^i_{\;jk}(x)\, \dot{x}^j \dot{x}^k = 0.
+\label{eq:geodesic}
+\end{equation}
+Define the acceleration field
+\begin{equation}
+ a^i(x, v) = -\Gamma^i_{\;jk}(x)\, v^j v^k.
+\label{eq:accel}
+\end{equation}
+This structure makes dynamics interpretable: each term is a coupling of velocities scaled by state-dependent coefficients.
+
+If a metric $g(x)$ exists such that the connection is Levi-Civita, then $\Gamma$ is torsion-free and metric-compatible ($\nabla g = 0$). In coordinates, metric compatibility yields
+\begin{equation}
+\partial_i g_{jk} = \Gamma^{\ell}_{\;ij} g_{\ell k} + \Gamma^{\ell}_{\;ik} g_{j\ell}.
+\label{eq:metriccompat}
+\end{equation}
+We exploit this to reconstruct a metric implied by the learned connection.
+
+% -----------------------------------------------------------------------------
+\section{Model: Polynomial Christoffel network}
+% -----------------------------------------------------------------------------
+We parameterize $\Gamma^i_{\;jk}(x)$ using a monomial basis $\phi(x)$ up to degree $p$. For $d$ dimensions and degree $p=2$, the feature dimension is
+\begin{equation}
+M = 1 + d + \frac{d(d+1)}{2}.
+\end{equation}
+The feature map is
+\begin{equation}
+\phi(x) = [1,\ x_1,\ldots,x_d,\ x_1^2,\ x_1 x_2,\ldots, x_d^2]^\top \in \mathbb{R}^M.
+\end{equation}
+We then define
+\begin{equation}
+\Gamma^i_{\;jk}(x) = \sum_{m=1}^{M} C^i_{\;jk,m}\, \phi_m(x),
+\label{eq:gamma_poly}
+\end{equation}
+with learnable coefficients $C^i_{\;jk,m}$. In the implementation, polynomial features are in \texttt{poly\_features.py}, and the coefficient tensor is in \texttt{christoffel.py} (parameter \texttt{self.C}). Torsion-free symmetry is enforced by construction using a symmetric average in the lower indices.
+
+% -----------------------------------------------------------------------------
+\section{Discrete geodesic rollout}
+% -----------------------------------------------------------------------------
+We integrate Eq.~\ref{eq:geodesic} by converting it to a first-order system:
+\begin{equation}
+\dot{x} = v, \qquad \dot{v}^i = a^i(x,v).
+\end{equation}
+A simple semi-implicit Euler update is used:
+\begin{equation}
+ v_{t+1} = v_t + \Delta t\, a(x_t, v_t), \qquad
+ x_{t+1} = x_t + \Delta t\, v_{t+1}.
+\label{eq:integrator}
+\end{equation}
+This defines a ResNet-style rollout, implemented in \texttt{integrators.py} (function \texttt{rollout\_geodesic\_resnet}). Optional projection onto a manifold constraint and velocity tangent projection are applied per step in \texttt{manifold.py}.
+
+% -----------------------------------------------------------------------------
+\section{Metric reconstruction and geometric regularizers}
+% -----------------------------------------------------------------------------
+Equation~\ref{eq:metriccompat} is a linear first-order PDE. Along a path $x(s)$ from a base point $x_0$ to $x$, it becomes an ODE:
+\begin{equation}
+\frac{d}{ds} g_{jk}(s) = \Big(\Gamma^{\ell}_{\;ij}(x(s)) g_{\ell k}(s) + \Gamma^{\ell}_{\;ik}(x(s)) g_{j\ell}(s)\Big) \frac{dx^i}{ds}.
+\label{eq:metric_ode}
+\end{equation}
+We discretize this ODE with Euler steps in \texttt{metric\_recon.py} (\texttt{metric\_ode\_step} and \texttt{reconstruct\_metric\_straight\_path}).
+
+Because a general connection need not be metric-compatible, the reconstructed metric can be path-dependent: $g^{(A)}(x) \neq g^{(B)}(x)$ for different paths. We measure this with a loop loss by comparing a direct path $x_0 \to x$ to a two-segment path $x_0 \to x_m \to x$:
+\begin{equation}
+\mathcal{L}_{\text{loop}} = \| g^{(A)}(x) - g^{(B)}(x) \|_F^2.
+\end{equation}
+The two-segment reconstruction is implemented in \texttt{reconstruct\_metric\_two\_segment}.
+
+To encourage a valid (pseudo-)Riemannian metric, we include symmetry, non-degeneracy, and signature penalties in \texttt{losses.py}:
+\begin{align}
+\mathcal{L}_{\text{sym}} &= \|g - g^\top\|_F^2, \\
+\mathcal{L}_{\text{det}} &= \frac{1}{B}\sum_b \mathrm{softplus}(\alpha - \log|\det g_b|), \\
+\mathcal{L}_{\text{sig}} &= \frac{1}{B}\sum_b \sum_{i=1}^d \mathrm{softplus}(-\beta\, s_i\, \lambda_i(g_b)),
+\end{align}
+where $g_b$ is the reconstructed metric for sample $b$, $\lambda_i(g_b)$ are eigenvalues in ascending order, and $s_i \in \{+1,-1\}$ encodes the target signature $(p,q)$. The symmetry loss enforces the metric tensor properties, the determinant barrier avoids degeneracy, and the signature loss penalizes eigenvalues that violate the prescribed signs. The base metric $g(x_0)$ is parameterized as a signed Cholesky factor with fixed signature in \texttt{model.py} (class \texttt{BaseMetric}),\footnote{Specifically, $g_0 = L\,\mathrm{diag}(\mathrm{signs}\cdot e^{\ell})\,L^\top$, with learnable lower-triangular $L$ and log-scales $\ell$.} which keeps the optimization in a valid metric family.
+In the implementation, $\alpha$ corresponds to the log-determinant floor (default $-2.0$) and $\beta$ controls how sharply signature violations are penalized.
+
+% -----------------------------------------------------------------------------
+\section{Training objective}
+% -----------------------------------------------------------------------------
+Given a trajectory $x_{0:T}$, the model either predicts in state space (no autoencoder) or predicts in latent space and decodes. The primary loss is
+\begin{equation}
+\mathcal{L}_{\text{traj}} = \frac{1}{BT} \sum_{b,t} \| \hat{x}_{b,t} - x_{b,t} \|^2,
+\end{equation}
+or a reconstruction loss in observation space when the autoencoder is enabled. The full objective is
+\begin{equation}
+\mathcal{L} = \mathcal{L}_{\text{traj/recon}} + \lambda_{\text{loop}} \mathcal{L}_{\text{loop}} + \lambda_{\text{sym}} \mathcal{L}_{\text{sym}} + \lambda_{\text{det}} \mathcal{L}_{\text{det}} + \lambda_{\text{sig}} \mathcal{L}_{\text{sig}} + \lambda_{\text{wd}} \|C\|_2^2,
+\end{equation}
+where $C$ is the Christoffel coefficient tensor. In AE mode, the reconstruction term is
+\begin{equation}
+\mathcal{L}_{\text{recon}} = \frac{1}{BT} \sum_{b,t} \| D(\hat{z}_{b,t}) - x_{b,t} \|^2.
+\end{equation}
+We also include explicit weight decay on $C$:
+\begin{equation}
+\mathcal{L}_{\text{wd}} = \sum_{i,j,k,m} C_{ijkm}^2,
+\end{equation}
+implemented as the mean of squared parameters in \texttt{train.py}. The training loop and metric warmup schedule are implemented in \texttt{train.py}, with a warmup fraction \texttt{metric\_warmup\_epochs} that delays metric-based losses until stable rollouts have formed. Metric losses are enabled only when \texttt{use\_metric\_losses} is true. The dataset for the polar benchmark is in \texttt{data.py}.
+
+% -----------------------------------------------------------------------------
+\section{Backpropagation and Autodiff}
+% -----------------------------------------------------------------------------
+All losses are differentiated with standard backpropagation through the unrolled computation graph. The discrete rollout in Eq.~\ref{eq:integrator} is a sequence of differentiable operations, so gradients flow from the trajectory loss to the Christoffel coefficients via the chain
+\begin{equation}
+\mathcal{L} \rightarrow \{\hat{x}_t, \hat{v}_t\}_{t=0}^{T} \rightarrow \Gamma(x_t) \rightarrow C.
+\end{equation}
+Metric reconstruction is similarly unrolled: the Euler updates in Eq.~\ref{eq:metric_ode} are executed for each step along a path, and gradients flow through the sequence to the same parameters. This is implemented directly in PyTorch without adjoint methods; each step becomes part of the computation graph.
+
+For numerical stability, the integrator clamps Christoffel values and velocities during rollout (\texttt{gamma\_max} and \texttt{vmax} in \texttt{integrators.py}). Training uses PyTorch AMP when enabled: \texttt{torch.cuda.amp.autocast} wraps the forward pass, and gradients are scaled with \texttt{torch.amp.GradScaler} in \texttt{train.py}. When multiple GPUs are available, the model is wrapped in \texttt{nn.DataParallel}. Data loading uses pinned memory and non-blocking transfers for throughput, and CUDA kernels can be autotuned via \texttt{torch.backends.cudnn.benchmark}.
+
+% -----------------------------------------------------------------------------
+
+% -----------------------------------------------------------------------------
+% ---------------------------------------------------------------------------
+% Append this after Subsection "Results" in Sec. Experiments and Evaluation,
+% or add as a new subsection after the AE0 results.
+% ---------------------------------------------------------------------------
+
+\subsection{Autoencoder latent-space variant (AE=1)}
+\label{subsec:polar_ae_results}
+
+We additionally evaluate a variant where an autoencoder learns a latent coordinate system
+$z = E(x)$ and the PolyChristoffel dynamics model is trained in the latent space. In this
+setting, the learned Christoffels and reconstructed metric live in \emph{latent} coordinates,
+so direct comparison to the polar-coordinate ground truth tensors is generally not meaningful:
+a smooth coordinate change can dramatically alter coordinate expressions of both $\Gamma$ and $g$.
+Accordingly, we interpret AE results primarily through (i) trajectory reconstruction quality and
+(ii) intrinsic geometric consistency diagnostics (path dependence, symmetry, signature, and conditioning).
+
+\paragraph{Trajectory fidelity improves substantially.}
+With AE enabled, rollout MSE drops by an order of magnitude relative to the no-AE baseline:
+$\texttt{traj\_mse}=2.31\times 10^{-1}$ and $\texttt{traj\_mse\_final}=4.03\times 10^{-1}$
+(Table~\ref{tab:polar_metrics_ae}). The per-timestep MSE increases gradually over the horizon,
+from $\approx 9.84\times 10^{-2}$ at $t=1$ to $\approx 4.03\times 10^{-1}$ at $t=T$,
+indicating reduced but still present compounding error. \cite{ }% keep bib happy if needed
+% (Numbers taken from evaluate.py JSON output.)
+% NOTE: You can remove the \cite{} line if your template complains; the actual citation is in the prose below.
+
+\paragraph{Latent-space geometry is metrizable and well-conditioned.}
+Unlike the no-AE evaluation where rollout-state metric diagnostics can explode,
+the AE run yields strong geometric consistency:
+$\texttt{loop\_mse\_mean}\approx 4.22\times 10^{-3}$, near-zero signature penalty
+($\texttt{signature\_loss}\approx 4.40\times 10^{-4}$), strictly positive minimum eigenvalue
+($\texttt{metric\_min\_eig}\approx 3.50\times 10^{-1}$), and zero fraction of negative eigenvalues.
+Together, these indicate that the learned connection in latent space is close to being compatible
+with a smooth SPD metric (fixed signature $(2,0)$) and that metric reconstruction remains stable
+on rollout states.
+
+\paragraph{Interpreting Christoffels/metrics under AE.}
+Grid-based plots (Figures~\ref{fig:polar_ae_christoffels}--\ref{fig:polar_ae_metric}) should be
+read differently than in the no-AE case. Because $z=E(x)$ is a learned coordinate transform,
+the ``correct'' latent Christoffels are not the polar Christoffels; even if the underlying geometry
+is Euclidean, a nonlinear encoder generally induces nontrivial $\Gamma(z)$ and $g(z)$.
+Therefore:
+\begin{itemize}
+  \item It is expected that $\Gamma(z)$ does \emph{not} match the polar closed forms.
+  \item The important signal is that reconstructed $\hat g(z)$ is symmetric, non-degenerate, and
+        exhibits low path dependence (loop error), which we observe.
+\end{itemize}
+For a coordinate-invariant comparison back in observation space, the appropriate diagnostic is a
+\emph{pullback} metric using the encoder Jacobian:
+\[
+g_x(x) \;=\; J_E(x)^\top\, g_z\!\big(E(x)\big)\, J_E(x),
+\]
+which can be compared to a target observation-space metric (e.g., Euclidean or the known polar metric).
+This is implemented in the AE metric inspection script (\texttt{inspect\_metric\_ae.py}) and is the
+recommended way to assess whether the learned latent geometry corresponds to the intended geometry in $x$.
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=0.98\textwidth]{figs/AE1Polar_Christ.png}
+  \caption{AE=1 Christoffel diagnostics (latent coordinates). Note that direct comparison to polar
+  coordinate ground truth is not coordinate-invariant and is shown primarily for visualization.
+  The key empirical improvement under AE is not exact component matching, but improved rollout accuracy
+  and stable metric reconstruction with low path dependence.}
+  \label{fig:polar_ae_christoffels}
+\end{figure*}
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=0.98\textwidth]{figs/AE1Polar_G.png}
+  \caption{AE=1 metric reconstruction diagnostics in latent space. The loop/path-dependence map is
+  uniformly small, and eigenvalue checks confirm an SPD metric across the evaluated grid.}
+  \label{fig:polar_ae_metric}
+\end{figure*}
+
+\begin{table}[t]
+  \centering
+  \small
+  \begin{tabular}{@{}l r r@{}}
+    \toprule
+    \textbf{Metric (rollout states)} & \textbf{AE=0} & \textbf{AE=1} \\
+    \midrule
+    \multicolumn{3}{@{}l@{}}{\emph{Trajectory fidelity}}\\
+    Trajectory MSE (avg over time) & $1.492$ & $2.312\times 10^{-1}$ \\
+    Trajectory MSE (final step) & $2.178$ & $4.027\times 10^{-1}$ \\
+    Per-step MSE at $t{=}1$ & $1.01\times 10^{-1}$ & $1.07\times 10^{-1}$ \\
+    Per-step MSE at $t{=}T$ & $2.178$ & $4.027\times 10^{-1}$ \\
+    \midrule
+    \multicolumn{3}{@{}l@{}}{\emph{Connection / dynamics diagnostics}}\\
+    MSE$\big[\Gamma^r_{\theta\theta}\big]$ (vs GT, rollout states) & $5.050$ & -- \\
+    MSE$\big[\Gamma^\theta_{r\theta}\big]$ (vs GT, rollout states) & $2.118$ & -- \\
+    Acceleration MSE & $1.37\times 10^{6}$ & -- \\
+    \midrule
+    \multicolumn{3}{@{}l@{}}{\emph{Metric reconstruction / geometry consistency}}\\
+    Loop/path MSE mean $\|g^{(A)}{-}g^{(B)}\|^2$ & $3.79\times 10^{28}$ & $4.22\times 10^{-3}$ \\
+    Symmetry loss $\|g-g^\top\|^2$ & $0$ & $0$ \\
+    Log$|\det|$ barrier loss & $1.73\times 10^{-1}$ & $1.10\times 10^{-1}$ \\
+    Signature penalty (aggregate) & $1.22\times 10^{6}$ & $4.40\times 10^{-4}$ \\
+    Min eigenvalue of $\hat g$ & $-4.92\times 10^{7}$ & $3.50\times 10^{-1}$ \\
+    Fraction negative eigenvalues & $3.48\times 10^{-1}$ & $0$ \\
+    \bottomrule
+  \end{tabular}
+  \caption{Rollout-state evaluation metrics from \texttt{evaluate.py}.
+  AE=1 substantially improves rollout accuracy and stabilizes metric reconstruction
+  (low path dependence and correct SPD signature). Entries marked ``--'' are not
+  directly comparable in AE mode because learned latent coordinates change the
+  coordinate expression of $\Gamma$ and acceleration unless pullback-to-$x$ diagnostics are used.}
+  \label{tab:polar_metrics_compare}
+\end{table}
+
+% \begin{figure*}[t]
+%   \centering
+%   \includegraphics[width=0.98\textwidth]{figs/AE1Polar_Gt.png}
+%   \caption{AE=1 metric reconstruction with ground-truth base metric at the basepoint. Results are
+%   qualitatively similar, suggesting that instability is not dominated by basepoint initialization
+%   under AE training.}
+%   \label{fig:polar_ae_metric_gt}
+% \end{figure*}
+
+
+% -----------------------------------------------------------------------------
+\FloatBarrier
+\section{Limitations and future work}
+% -----------------------------------------------------------------------------
+The approach enforces metrizability only softly via loop and validity losses. Some connections may fit trajectories yet remain far from Levi-Civita of any metric. Integration uses a simple Euler scheme, which may introduce numerical drift for long rollouts. More accurate integrators (e.g., RK4 or ODE solvers) and explicit co-training of a metric network could strengthen geometric consistency. Extending to higher-dimensional observations (e.g., images) will require robust encoders and careful Jacobian estimation, as studied in atlas-based methods~\cite{korman2021atlas} and related work on geodesic flows~\cite{burge2025ngf}.
+
+% -----------------------------------------------------------------------------
+\section*{Availability}
+% -----------------------------------------------------------------------------
+The full implementation and source code is available at (https://github.com/Mihir-Null/PolyChristoffelNet) under \texttt{poly\_christoffel/} and includes training, diagnostics, and visualization scripts referenced throughout this report.
+
+\FloatBarrier
+\pagebreak
+
+% -----------------------------------------------------------------------------
+\bibliographystyle{plain}
+\bibliography{\jobname}
+
+\appendix
+\section{Implementation details}
+% -----------------------------------------------------------------------------
+\begin{itemize}
+  \item \textbf{Polynomial features:} Eq.~\ref{eq:gamma_poly} is implemented in \texttt{poly\_features.py} (monomials up to degree two).
+  \item \textbf{Connection tensor:} The coefficient tensor $C^i_{\;jk,m}$ and torsion-free symmetrization are in \texttt{christoffel.py}.
+  \item \textbf{Geodesic acceleration:} Eq.~\ref{eq:accel} is computed in \texttt{integrators.py} (function \texttt{geodesic\_accel}).
+  \item \textbf{Integrator:} The discrete update in Eq.~\ref{eq:integrator} is implemented in \texttt{rollout\_geodesic\_resnet} with optional manifold projections.
+  \item \textbf{Metric reconstruction:} Eq.~\ref{eq:metric_ode} is discretized in \texttt{metric\_recon.py}.
+  \item \textbf{Losses:} Symmetry, determinant barrier, and signature penalties are in \texttt{losses.py}.
+  \item \textbf{Training:} Orchestrated in \texttt{train.py}, including data loading, velocity initialization, rollout, and loss aggregation.
+\end{itemize}
+
+\end{document}

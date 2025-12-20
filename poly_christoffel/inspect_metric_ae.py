@@ -86,12 +86,14 @@ def encode_points(model: FullGeoModel, y: torch.Tensor) -> torch.Tensor:
     y: (B,2)
     returns z: (B,d)
     """
-    # FullGeoModel in this project typically has an encoder module if use_ae=True
-    if hasattr(model, "encoder") and model.encoder is not None:
-        z = model.encoder(y)
+    # Use the AE encoder when present; otherwise fall back to identity.
+    if hasattr(model, "ae") and model.ae is not None:
+        z = model.ae.encode(y)
     else:
-        # fallback: treat as identity
         z = y
+    # Old encoder path (kept for easy reversion):
+    # if hasattr(model, "encoder") and model.encoder is not None:
+    #     z = model.encoder(y)
     # If manifold constraint exists, keep the same convention as training (encode then project)
     if hasattr(model, "manifold") and model.manifold is not None:
         z = model.manifold.project(z)
@@ -132,7 +134,7 @@ def encoder_jacobian(model: FullGeoModel, y: torch.Tensor) -> torch.Tensor:
         return J
 
 
-@torch.no_grad()
+# @torch.no_grad()  # old behavior (disabled autograd Jacobians)
 def main():
     args = parse_args()
     device = torch.device(args.device if (args.device == "cpu" or torch.cuda.is_available()) else "cpu")
@@ -361,5 +363,5 @@ def main():
 
 
 if __name__ == "__main__":
-    # This script uses autograd Jacobians; disable global no_grad by not wrapping main() in no_grad.
+    # This script uses autograd Jacobians; do not wrap main() in no_grad.
     main()

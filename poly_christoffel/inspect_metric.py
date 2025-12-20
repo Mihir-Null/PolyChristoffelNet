@@ -144,9 +144,15 @@ def main():
     # Ground truth metric on grid
     gGT = ground_truth_polar_metric(z[:, 0])  # depends only on r
 
-    # Fit per-point scale alpha to account for constant scale ambiguity (and imperfect g0)
-    alpha = best_fit_scale(gA, gGT)  # (N,1,1)
+    # Fit a single global scale alpha to account for constant scale ambiguity (and imperfect g0).
+    # This avoids per-point rescaling that can make GT plots track the learned metric too closely.
+    num = torch.sum(gA * gGT)
+    den = torch.sum(gGT * gGT).clamp_min(1e-12)
+    alpha = (num / den).view(1, 1, 1)
     gGT_scaled = alpha * gGT
+    # Old per-point scaling (kept for easy reversion):
+    # alpha = best_fit_scale(gA, gGT)  # (N,1,1)
+    # gGT_scaled = alpha * gGT
 
     # Errors
     offdiag = gA[:, 0, 1]

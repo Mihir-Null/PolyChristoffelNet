@@ -1,0 +1,26 @@
+\begin{thebibliography}{1}
+
+\bibitem{burge2025ngf}
+J.~Burge.
+\newblock Neural geodesic flows.
+\newblock Master's thesis, ETH Zurich, 2025.
+
+\bibitem{chen2018node}
+Tian~Qi Chen, Yulia Rubanova, Jesse Bettencourt, and David Duvenaud.
+\newblock Neural ordinary differential equations.
+\newblock {\em arXiv preprint arXiv:1806.07366}, 2018.
+\newblock \url{https://arxiv.org/abs/1806.07366}.
+
+\bibitem{greydanus2019hnn}
+Sam Greydanus, Misko Dzamba, and Jason Yosinski.
+\newblock Hamiltonian neural networks.
+\newblock {\em arXiv preprint arXiv:1906.01563}, 2019.
+\newblock \url{https://arxiv.org/abs/1906.01563}.
+
+\bibitem{korman2021atlas}
+E.~O. Korman.
+\newblock Atlas based representation and metric learning on manifolds.
+\newblock {\em arXiv preprint arXiv:2106.07062}, 2021.
+\newblock \url{https://arxiv.org/abs/2106.07062}.
+
+\end{thebibliography}
